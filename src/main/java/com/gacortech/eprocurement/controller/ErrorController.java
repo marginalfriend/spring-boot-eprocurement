@@ -1,5 +1,5 @@
 package com.gacortech.eprocurement.controller;
-import com.enigma.enigma_shop.dto.response.CommonResponse;
+import com.gacortech.eprocurement.dto.responses.CommonResponse;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
