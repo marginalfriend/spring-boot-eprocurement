@@ -1,10 +1,10 @@
 package com.gacortech.eprocurement.repository;
 
-import com.gacortech.eprocurement.entity.ProductSupply;
+import com.gacortech.eprocurement.entity.ProductSupplies;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProductSupplyRepository extends JpaRepository<ProductSupply, Integer>, JpaSpecificationExecutor<ProductSupply> {
+public interface ProductSuppliesRepository extends JpaRepository<ProductSupplies, Integer>, JpaSpecificationExecutor<ProductSupplies> {
 }

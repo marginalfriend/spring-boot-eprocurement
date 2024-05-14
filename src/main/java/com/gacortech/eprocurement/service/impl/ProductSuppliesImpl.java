@@ -1,8 +1,8 @@
 package com.gacortech.eprocurement.service.impl;
 
-import com.gacortech.eprocurement.entity.ProductSupply;
-import com.gacortech.eprocurement.repository.ProductSupplyRepository;
-import com.gacortech.eprocurement.service.ProductSupplyService;
+import com.gacortech.eprocurement.entity.ProductSupplies;
+import com.gacortech.eprocurement.repository.ProductSuppliesRepository;
+import com.gacortech.eprocurement.service.ProductSuppliesService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,17 +10,17 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class ProductSupplyImpl implements ProductSupplyService {
+public class ProductSuppliesImpl implements ProductSuppliesService {
 
-    private final ProductSupplyRepository productSupplyRepository;
+    private final ProductSuppliesRepository productSupplyRepository;
     @Override
-    public List<ProductSupply> getAll() {
+    public List<ProductSupplies> getAll() {
 
         return productSupplyRepository.findAll();
     }
 
     @Override
-    public ProductSupply getByid(Integer i) {
+    public ProductSupplies getByid(Integer i) {
 
         return productSupplyRepository.findById(i)
                 .orElseThrow(
@@ -29,13 +29,13 @@ public class ProductSupplyImpl implements ProductSupplyService {
     }
 
     @Override
-    public ProductSupply create(ProductSupply productSupply) {
+    public ProductSupplies create(ProductSupplies productSupply) {
 
         return productSupplyRepository.saveAndFlush(productSupply);
     }
 
     @Override
-    public ProductSupply update(ProductSupply productSupply) {
+    public ProductSupplies update(ProductSupplies productSupply) {
         getByid(productSupply.getId());
         return productSupplyRepository.saveAndFlush(productSupply);
     }

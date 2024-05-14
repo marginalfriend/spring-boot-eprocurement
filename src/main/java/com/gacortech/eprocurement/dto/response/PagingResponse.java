@@ -1,4 +1,4 @@
-package com.gacortech.eprocurement.dto.responses;
+package com.gacortech.eprocurement.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
