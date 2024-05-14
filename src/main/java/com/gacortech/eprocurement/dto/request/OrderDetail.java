@@ -1,7 +1,7 @@
 package com.gacortech.eprocurement.dto.request;
 
+import com.gacortech.eprocurement.entity.Orders;
 import com.gacortech.eprocurement.entity.Products;
-import com.gacortech.eprocurement.entity.Vendors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,10 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
-public class ProductSupply {
-    private Integer id;
-    private Products productId;
-    private Vendors vendorId;
-    private Integer stock;
-    private Integer price;
+public class OrderDetail {
+    private String id;
+    private Orders orders;
+    private Products product;
+    private Integer quantity;
 }
