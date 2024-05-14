@@ -18,11 +18,11 @@ public class ProductSupplies {
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
-    private Products productId;
+    private Products product;
 
     @ManyToOne
     @JoinColumn(name = "vendor_id", nullable = false)
-    private Vendors vendorId;
+    private Vendors vendor;
 
     @Column(name = "stock")
     private Integer stock;
