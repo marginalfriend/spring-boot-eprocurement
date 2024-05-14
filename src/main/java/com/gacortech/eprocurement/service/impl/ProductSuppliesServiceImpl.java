@@ -15,6 +15,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -43,15 +45,21 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
         Products productFound = productsService.findByIdOrThrowNotFound(productSupply.getProductId());
         Vendors vendorFound = vendorsService.getById(productSupply.getVendorId());
 
-        Specification<ProductSupplies> specification = ProductSupplySpecification.getVendorAndProductEqual(productSupply);
-        Optional<ProductSupplies> one = productSupplyRepository.findOne(specification);
+        Set<ProductSupplies> collect = getAll().stream()
+                .filter(productSupplies ->
+                        productSupplies.getProduct().equals(productFound)
+                                &&
+                        productSupplies.getVendor().equals(vendorFound)
 
-        if(one.isPresent()){
+                )
+                .collect(Collectors.toSet());
+
+        if(!collect.isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Product Supply Has Been Input");
         }
 
         return productSupplyRepository.saveAndFlush(
-                new ProductSupplies().builder()
+                ProductSupplies.builder()
                         .product(productFound)
                         .vendor(vendorFound)
                         .price(productSupply.getPrice())
@@ -68,7 +76,7 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
         Products productFound = productsService.findByIdOrThrowNotFound(productSupply.getProductId());
         Vendors vendorFound = vendorsService.getById(productSupply.getVendorId());
         return productSupplyRepository.saveAndFlush(
-                new ProductSupplies().builder()
+                ProductSupplies.builder()
                         .product(productFound)
                         .vendor(vendorFound)
                         .price(productSupply.getPrice())
