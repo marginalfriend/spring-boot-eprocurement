@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Report {
+public class ReportResponse {
     private Long id;
     private String productName;
     private String vendorName;
