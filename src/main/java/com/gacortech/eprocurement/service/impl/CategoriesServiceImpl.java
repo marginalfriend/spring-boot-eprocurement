@@ -1,10 +1,13 @@
 package com.gacortech.eprocurement.service.impl;
 
+import com.gacortech.eprocurement.constant.ResponseMessages;
 import com.gacortech.eprocurement.entity.Categories;
 import com.gacortech.eprocurement.repository.CategoriesRepository;
 import com.gacortech.eprocurement.service.CategoriesService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -36,6 +39,6 @@ public class CategoriesServiceImpl implements CategoriesService {
 
     public Categories findByIdOrThrowNotFound(Integer id){
         return categoriesRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("category not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ResponseMessages.ERROR_NOT_FOUND));
     }
 }

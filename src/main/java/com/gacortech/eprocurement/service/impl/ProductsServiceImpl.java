@@ -1,10 +1,13 @@
 package com.gacortech.eprocurement.service.impl;
 
+import com.gacortech.eprocurement.constant.ResponseMessages;
 import com.gacortech.eprocurement.entity.Products;
 import com.gacortech.eprocurement.repository.ProductsRepository;
 import com.gacortech.eprocurement.service.ProductsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -36,6 +39,6 @@ public class ProductsServiceImpl implements ProductsService {
 
     public Products findByIdOrThrowNotFound(String id){
         return productsRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("product not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ResponseMessages.ERROR_NOT_FOUND));
     }
 }
