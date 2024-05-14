@@ -1,6 +1,5 @@
 package com.gacortech.eprocurement.entity;
 
-import com.gacortech.eprocurement.constant.Tables;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,8 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = Tables.PRODUCT_SUPPLY)
-public class ProductSupplies {
+@Table(name = "product_supply")
+public class ProductSupply {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
