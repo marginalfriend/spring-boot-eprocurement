@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = Tables.PRODUCT_SUPPLY)
-public class ProductSupply {
+public class ProductSupplies {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
