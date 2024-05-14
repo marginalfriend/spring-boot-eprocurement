@@ -1,5 +1,6 @@
 package com.gacortech.eprocurement.entity;
 
+import com.gacortech.eprocurement.constant.Tables;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name= "vendors")
+@Table(name= Tables.VENDORS)
 public class Vendors {
 
     @Id
