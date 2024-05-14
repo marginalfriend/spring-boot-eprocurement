@@ -1,5 +1,6 @@
 package com.gacortech.eprocurement.service.impl;
 
+import com.gacortech.eprocurement.dto.entity_rep.ProductSupply;
 import com.gacortech.eprocurement.entity.ProductSupplies;
 import com.gacortech.eprocurement.repository.ProductSuppliesRepository;
 import com.gacortech.eprocurement.service.ProductSuppliesService;
@@ -29,14 +30,30 @@ public class ProductSuppliesImpl implements ProductSuppliesService {
     }
 
     @Override
-    public ProductSupplies create(ProductSupplies productSupply) {
+    public ProductSupplies create(ProductSupply productSupply) {
 
-        return productSupplyRepository.saveAndFlush(productSupply);
+        return productSupplyRepository.saveAndFlush(
+                new ProductSupplies().builder()
+                        .productId(productSupply.getProductId())
+                        .vendorId(productSupply.getVendorId())
+                        .price(productSupply.getPrice())
+                        .stock(productSupply.getStock())
+                        .build()
+        );
     }
 
+
+
     @Override
-    public ProductSupplies update(ProductSupplies productSupply) {
+    public ProductSupplies update(ProductSupply productSupply) {
         getByid(productSupply.getId());
-        return productSupplyRepository.saveAndFlush(productSupply);
+        return productSupplyRepository.saveAndFlush(
+                new ProductSupplies().builder()
+                        .productId(productSupply.getProductId())
+                        .vendorId(productSupply.getVendorId())
+                        .price(productSupply.getPrice())
+                        .stock(productSupply.getStock())
+                        .build()
+        );
     }
 }

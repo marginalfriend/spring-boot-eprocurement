@@ -3,12 +3,14 @@ package com.gacortech.eprocurement.entity;
 import com.gacortech.eprocurement.constant.Tables;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = Tables.PRODUCT_SUPPLY)
 public class ProductSupplies {
