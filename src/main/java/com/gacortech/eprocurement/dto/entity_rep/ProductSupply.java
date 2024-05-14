@@ -1,4 +1,4 @@
-package com.gacortech.eprocurement.dto.request;
+package com.gacortech.eprocurement.dto.entity_rep;
 
 import com.gacortech.eprocurement.entity.Products;
 import com.gacortech.eprocurement.entity.Vendors;

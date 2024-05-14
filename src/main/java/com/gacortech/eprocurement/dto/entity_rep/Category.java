@@ -1,6 +1,6 @@
-package com.gacortech.eprocurement.dto.request;
+package com.gacortech.eprocurement.dto.entity_rep;
 
-import com.gacortech.eprocurement.entity.Categories;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
-public class Product {
-    private String id;
+public class Category {
+    private Integer id;
     private String name;
-    private Categories categoryId;
 }

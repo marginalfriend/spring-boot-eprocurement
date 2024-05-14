@@ -1,17 +1,17 @@
-package com.gacortech.eprocurement.dto.request;
+package com.gacortech.eprocurement.dto.entity_rep;
 
+import com.gacortech.eprocurement.entity.Categories;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
-public class Order {
+public class Product {
     private String id;
-    private LocalDate orderDate;
+    private String name;
+    private Categories categoryId;
 }
