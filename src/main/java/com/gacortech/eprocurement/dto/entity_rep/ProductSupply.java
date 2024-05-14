@@ -4,8 +4,8 @@ import java.util.UUID;
 
 public class ProductSupply {
     private Integer id;
-    private UUID    productId;
-    private UUID    vendorId;
+    private String  productId;
+    private String  vendorId;
     private Integer stock;
     private Integer price;
 }
