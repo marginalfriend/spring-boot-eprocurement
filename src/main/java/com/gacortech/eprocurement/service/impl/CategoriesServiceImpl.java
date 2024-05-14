@@ -2,6 +2,7 @@ package com.gacortech.eprocurement.service.impl;
 
 import com.gacortech.eprocurement.constant.ResponseMessages;
 import com.gacortech.eprocurement.dto.entity_rep.Category;
+import com.gacortech.eprocurement.dto.response.CategoryResponse;
 import com.gacortech.eprocurement.entity.Categories;
 import com.gacortech.eprocurement.repository.CategoriesRepository;
 import com.gacortech.eprocurement.service.CategoriesService;
@@ -18,31 +19,40 @@ public class CategoriesServiceImpl implements CategoriesService {
     private final CategoriesRepository categoriesRepository;
 
     @Override
-    public Categories create(Category category) {
+    public CategoryResponse create(Category request) {
         Categories newCategory = Categories.builder()
+                .name(request.getName())
+                .build();
+        categoriesRepository.saveAndFlush(newCategory);
+        return CategoryResponse.builder()
+                .name(newCategory.getName())
+                .build();
+    }
+
+    @Override
+    public CategoryResponse getById(Integer id) {
+        Categories categoryFound = findByIdOrThrowNotFound(id);
+        return CategoryResponse.builder()
+                .name(categoryFound.getName())
+                .build();
+    }
+
+    @Override
+    public List<CategoryResponse> getAll() {
+        List<Categories> categories = categoriesRepository.findAll();
+        return categories.stream()
+                .map(ctg -> CategoryResponse.builder()
+                        .name(ctg.getName())
+                        .build()).toList();
+    }
+
+    @Override
+    public CategoryResponse update(Category category) {
+        Categories updateCategory = findByIdOrThrowNotFound(category.getId());
+        categoriesRepository.saveAndFlush(updateCategory);
+        return CategoryResponse.builder()
                 .name(category.getName())
                 .build();
-        return categoriesRepository.saveAndFlush(newCategory);
-    }
-
-    @Override
-    public Categories getById(Integer id) {
-        return findByIdOrThrowNotFound(id);
-    }
-
-    @Override
-    public List<Categories> getAll() {
-        return categoriesRepository.findAll();
-    }
-
-    @Override
-    public Categories update(Category category) {
-        findByIdOrThrowNotFound(category.getId());
-        Categories updateCategory = Categories.builder()
-                .id(category.getId())
-                .name(category.getName())
-                .build();
-        return categoriesRepository.saveAndFlush(updateCategory);
     }
 
     public Categories findByIdOrThrowNotFound(Integer id){
