@@ -16,6 +16,7 @@ public class ProductSupplies {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Products productId;
 
