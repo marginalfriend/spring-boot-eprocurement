@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class VendorsImpl implements VendorsService {
+public class VendorsServiceImpl implements VendorsService {
 
     private final VendorsRepository vendorsRepository;
 

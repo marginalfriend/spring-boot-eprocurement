@@ -11,15 +11,15 @@ import java.util.List;
 
 public class ProductSupplySpecification {
 
-    public static Specification<ProductSupplies> getSpecification(ProductSupply productSupply){
+    public static Specification<ProductSupplies> getVendorAndProductEqual(ProductSupply productSupply){
 
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            Predicate prdctIdPred =  criteriaBuilder.equal(root.get("productId"), productSupply.getProductId());
+            Predicate prdctIdPred =  criteriaBuilder.equal(root.get("product"), productSupply.getProductId());
             predicates.add(prdctIdPred);
 
-            Predicate vendorId = criteriaBuilder.equal(root.get("vendor_id"), productSupply.getVendorId());
+            Predicate vendorId = criteriaBuilder.equal(root.get("vendor"), productSupply.getVendorId());
             predicates.add(vendorId);
 
             return query.where(criteriaBuilder.and(predicates.toArray(new Predicate[]{}))).getRestriction();

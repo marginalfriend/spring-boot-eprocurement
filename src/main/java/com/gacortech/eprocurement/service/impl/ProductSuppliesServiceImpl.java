@@ -2,6 +2,8 @@ package com.gacortech.eprocurement.service.impl;
 
 import com.gacortech.eprocurement.dto.entity_rep.ProductSupply;
 import com.gacortech.eprocurement.entity.ProductSupplies;
+import com.gacortech.eprocurement.entity.Products;
+import com.gacortech.eprocurement.entity.Vendors;
 import com.gacortech.eprocurement.repository.ProductSuppliesRepository;
 import com.gacortech.eprocurement.service.ProductSuppliesService;
 import com.gacortech.eprocurement.specification.ProductSupplySpecification;
@@ -19,6 +21,8 @@ import java.util.Optional;
 public class ProductSuppliesServiceImpl implements ProductSuppliesService {
 
     private final ProductSuppliesRepository productSupplyRepository;
+    private final ProductsServiceImpl productsService;
+    private final VendorsServiceImpl vendorsService;
     @Override
     public List<ProductSupplies> getAll() {
 
@@ -36,7 +40,10 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
     @Override
     public ProductSupplies create(ProductSupply productSupply) {
 
-        Specification<ProductSupplies> specification = ProductSupplySpecification.getSpecification(productSupply);
+        Products productFound = productsService.findByIdOrThrowNotFound(productSupply.getProductId());
+        Vendors vendorFound = vendorsService.getById(productSupply.getVendorId());
+
+        Specification<ProductSupplies> specification = ProductSupplySpecification.getVendorAndProductEqual(productSupply);
         Optional<ProductSupplies> one = productSupplyRepository.findOne(specification);
 
         if(one.isPresent()){
@@ -45,8 +52,8 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
 
         return productSupplyRepository.saveAndFlush(
                 new ProductSupplies().builder()
-                        .productId(productSupply.getProductId())
-                        .vendorId(productSupply.getVendorId())
+                        .product(productFound)
+                        .vendor(vendorFound)
                         .price(productSupply.getPrice())
                         .stock(productSupply.getStock())
                         .build()
@@ -58,10 +65,12 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
     @Override
     public ProductSupplies update(ProductSupply productSupply) {
         getByid(productSupply.getId());
+        Products productFound = productsService.findByIdOrThrowNotFound(productSupply.getProductId());
+        Vendors vendorFound = vendorsService.getById(productSupply.getVendorId());
         return productSupplyRepository.saveAndFlush(
                 new ProductSupplies().builder()
-                        .productId(productSupply.getProductId())
-                        .vendorId(productSupply.getVendorId())
+                        .product(productFound)
+                        .vendor(vendorFound)
                         .price(productSupply.getPrice())
                         .stock(productSupply.getStock())
                         .build()
