@@ -14,3 +14,18 @@ import java.util.List;
 public class OrderRequest {
     private List<OrderDetailRequest> orderDetails;
 }
+
+//  [
+//        {
+//          productSupplyId : *****
+//          quantity : *****
+//        },
+//        {
+//          productSupplyId : *****
+//          quantity : *****
+//        },
+//        {
+//          productSupplyId : *****
+//          quantity : *****
+//        }
+//  ]
