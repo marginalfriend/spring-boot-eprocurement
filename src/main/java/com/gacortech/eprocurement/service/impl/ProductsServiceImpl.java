@@ -1,6 +1,7 @@
 package com.gacortech.eprocurement.service.impl;
 
 import com.gacortech.eprocurement.constant.ResponseMessages;
+import com.gacortech.eprocurement.dto.entity_rep.Product;
 import com.gacortech.eprocurement.entity.Products;
 import com.gacortech.eprocurement.repository.ProductsRepository;
 import com.gacortech.eprocurement.service.ProductsService;
@@ -17,8 +18,12 @@ public class ProductsServiceImpl implements ProductsService {
     private final ProductsRepository productsRepository;
 
     @Override
-    public Products create(Products products) {
-        return productsRepository.saveAndFlush(products);
+    public Products create(Product product) {
+        Products newProduct = Products.builder()
+                .name(product.getName())
+                .categoryId(product.getCategoryId())
+                .build();
+        return productsRepository.saveAndFlush(newProduct);
     }
 
     @Override
@@ -32,9 +37,14 @@ public class ProductsServiceImpl implements ProductsService {
     }
 
     @Override
-    public Products update(Products products) {
-        findByIdOrThrowNotFound(products.getId());
-        return productsRepository.saveAndFlush(products);
+    public Products update(Product product) {
+        findByIdOrThrowNotFound(product.getId());
+        Products updateProduct = Products.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .categoryId(product.getCategoryId())
+                .build();
+        return productsRepository.saveAndFlush(updateProduct);
     }
 
     public Products findByIdOrThrowNotFound(String id){

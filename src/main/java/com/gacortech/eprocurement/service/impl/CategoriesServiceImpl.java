@@ -1,6 +1,7 @@
 package com.gacortech.eprocurement.service.impl;
 
 import com.gacortech.eprocurement.constant.ResponseMessages;
+import com.gacortech.eprocurement.dto.entity_rep.Category;
 import com.gacortech.eprocurement.entity.Categories;
 import com.gacortech.eprocurement.repository.CategoriesRepository;
 import com.gacortech.eprocurement.service.CategoriesService;
@@ -17,8 +18,11 @@ public class CategoriesServiceImpl implements CategoriesService {
     private final CategoriesRepository categoriesRepository;
 
     @Override
-    public Categories create(Categories categories) {
-        return categoriesRepository.saveAndFlush(categories);
+    public Categories create(Category category) {
+        Categories newCategory = Categories.builder()
+                .name(category.getName())
+                .build();
+        return categoriesRepository.saveAndFlush(newCategory);
     }
 
     @Override
@@ -32,9 +36,13 @@ public class CategoriesServiceImpl implements CategoriesService {
     }
 
     @Override
-    public Categories update(Categories categories) {
-        findByIdOrThrowNotFound(categories.getId());
-        return categoriesRepository.saveAndFlush(categories);
+    public Categories update(Category category) {
+        findByIdOrThrowNotFound(category.getId());
+        Categories updateCategory = Categories.builder()
+                .id(category.getId())
+                .name(category.getName())
+                .build();
+        return categoriesRepository.saveAndFlush(updateCategory);
     }
 
     public Categories findByIdOrThrowNotFound(Integer id){
