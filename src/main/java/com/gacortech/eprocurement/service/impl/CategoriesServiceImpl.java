@@ -25,16 +25,13 @@ public class CategoriesServiceImpl implements CategoriesService {
                 .build();
         categoriesRepository.saveAndFlush(newCategory);
         return CategoryResponse.builder()
-                .name(newCategory.getName())
+                .categoryName(newCategory.getName())
                 .build();
     }
 
     @Override
-    public CategoryResponse getById(Integer id) {
-        Categories categoryFound = findByIdOrThrowNotFound(id);
-        return CategoryResponse.builder()
-                .name(categoryFound.getName())
-                .build();
+    public Categories getById(Integer id) {
+        return  findByIdOrThrowNotFound(id);
     }
 
     @Override
@@ -42,7 +39,7 @@ public class CategoriesServiceImpl implements CategoriesService {
         List<Categories> categories = categoriesRepository.findAll();
         return categories.stream()
                 .map(ctg -> CategoryResponse.builder()
-                        .name(ctg.getName())
+                        .categoryName(ctg.getName())
                         .build()).toList();
     }
 
@@ -51,7 +48,8 @@ public class CategoriesServiceImpl implements CategoriesService {
         Categories updateCategory = findByIdOrThrowNotFound(category.getId());
         categoriesRepository.saveAndFlush(updateCategory);
         return CategoryResponse.builder()
-                .name(category.getName())
+                .id(category.getId())
+                .categoryName(category.getName())
                 .build();
     }
 

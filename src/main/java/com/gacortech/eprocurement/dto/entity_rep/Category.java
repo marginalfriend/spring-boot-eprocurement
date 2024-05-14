@@ -15,5 +15,4 @@ import java.util.List;
 public class Category {
     private Integer id;
     private String name;
-    List<Product> products;
 }

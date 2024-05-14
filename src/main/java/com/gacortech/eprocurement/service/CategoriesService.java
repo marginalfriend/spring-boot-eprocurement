@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CategoriesService {
     CategoryResponse create(Category request);
-    CategoryResponse getById(Integer id);
+    Categories getById(Integer id);
     List<CategoryResponse> getAll();
     CategoryResponse update(Category request);
 }
