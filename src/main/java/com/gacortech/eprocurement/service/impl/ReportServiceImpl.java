@@ -12,7 +12,9 @@ import com.gacortech.eprocurement.entity.Vendors;
 import com.gacortech.eprocurement.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +68,10 @@ public class ReportServiceImpl implements ReportService {
                 );
             });
         });
+
+        if (result.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ResponseMessages.ERROR_NOT_FOUND);
+        }
 
         PagingResponse pagingResponse = PagingResponse.builder()
                 .totalPages(orders.getTotalPages())
