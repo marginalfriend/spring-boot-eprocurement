@@ -47,22 +47,8 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
             ).toList();
         }
 
-        //filter Specification
-        Specification<ProductSupplies> predicates = ProductSupplySpecification.getVendorAndProductEqual(productSupply);
-        List<ProductSupplies> temp1 = productSupplyRepository.findAll(predicates);
-
-
-        //filter Vendor
-        if(productSupply.getVendorId() != null && productSupply.getProductId() != null){
-
-            Vendors vendor = vendorsService.entityById(productSupply.getVendorId());
-            Products product = productsService.entityId(productSupply.getProductId());
-
-            return temp1.stream().filter(
-                    detailFil -> detailFil.getVendor().equals(vendor)
-                            &&
-                            detailFil.getProduct().equals(product)
-            ).map(
+        if(productSupply.getId() != null){
+            return productSupplyRepository.findById(productSupply.getId()).stream().map(
                     detail -> ProductSupplyResponse.builder()
                             .id(detail.getId())
                             .productName(detail.getProduct().getName())
@@ -70,44 +56,23 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
                             .price(detail.getPrice())
                             .stock(detail.getPrice())
                             .build()
-            ).collect(Collectors.toList());
-        }else if (productSupply.getVendorId() != null) {
-            Vendors vendor = vendorsService.entityById(productSupply.getVendorId());
-            return temp1.stream().filter(
-                    detailFil -> detailFil.getVendor().equals(vendor)
-            ).map(
-                    detail -> ProductSupplyResponse.builder()
-                            .id(detail.getId())
-                            .productName(detail.getProduct().getName())
-                            .vendorName(detail.getVendor().getNameVendor())
-                            .price(detail.getPrice())
-                            .stock(detail.getPrice())
-                            .build()
-            ).collect(Collectors.toList());
-        }else if (productSupply.getProductId() != null){
-            Products product = productsService.entityId(productSupply.getProductId());
-            return temp1.stream().filter(
-                    detailFil -> detailFil.getProduct().equals(product)
-            ).map(
-                    detail -> ProductSupplyResponse.builder()
-                            .id(detail.getId())
-                            .productName(detail.getProduct().getName())
-                            .vendorName(detail.getVendor().getNameVendor())
-                            .price(detail.getPrice())
-                            .stock(detail.getPrice())
-                            .build()
-            ).collect(Collectors.toList());
+            ).toList();
         }
 
-        return temp1.stream().map(
-                detail -> ProductSupplyResponse.builder()
-                        .id(detail.getId())
-                        .productName(detail.getProduct().getName())
-                        .vendorName(detail.getVendor().getNameVendor())
-                        .price(detail.getPrice())
-                        .stock(detail.getPrice())
-                        .build()
-        ).collect(Collectors.toList());
+        if(productSupply.getPrice() == null){
+            productSupply.setPrice(Integer.MAX_VALUE);
+        }
+
+        if(productSupply.getStock() == null){
+            productSupply.setStock(0);
+        }
+
+        if(productSupply.getProductId() == null && productSupply.getVendorId() == null){
+            productSupplyRepository
+                    .findAllByPriceLessThanAndStockGreaterThanEqual(productSupply.getPrice(), productSupply.getStock());
+        }
+
+        return null;
 
 
     }
