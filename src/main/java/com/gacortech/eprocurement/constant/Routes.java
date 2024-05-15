@@ -8,4 +8,5 @@ public class Routes {
     public static final String ORDERS   = ROOT + "/orders";
     public static final String VENDORS  = ROOT + "/vendors";
     public static final String REPORT   = ROOT + "/report";
+    public static final String PATH_VAR_ID = ROOT + "/{id}";
 }
