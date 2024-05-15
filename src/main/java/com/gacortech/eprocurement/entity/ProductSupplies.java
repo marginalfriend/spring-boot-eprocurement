@@ -28,8 +28,4 @@ public class ProductSupplies {
 
     @Column(name = "stock")
     private Integer stock;
-
-    @Column(name = "price")
-    private Integer price;
-
 }

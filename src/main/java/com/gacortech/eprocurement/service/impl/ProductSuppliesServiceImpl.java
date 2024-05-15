@@ -43,7 +43,6 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
                             .id(detail.getId())
                             .productName(detail.getProduct().getName())
                             .vendorName(detail.getVendor().getNameVendor())
-                            .price(detail.getPrice())
                             .stock(detail.getStock())
                             .build()
             ).toList();
@@ -56,7 +55,6 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
                             .id(detail.getId())
                             .productName(detail.getProduct().getName())
                             .vendorName(detail.getVendor().getNameVendor())
-                            .price(detail.getPrice())
                             .stock(detail.getStock())
                             .build()
             ).toList();
@@ -93,8 +91,6 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
                     .filter(
                             detail ->
                                     detail.getStock() >= productSupply.getStock()
-                            &&
-                                    detail.getPrice() <= productSupply.getPrice()
                     )
                     .stream()
                     .map(
@@ -102,7 +98,6 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
                                     .id(detail.getId())
                                     .productName(detail.getProduct().getName())
                                     .vendorName(detail.getVendor().getNameVendor())
-                                    .price(detail.getPrice())
                                     .stock(detail.getStock())
                                     .build()
                     ).toList();
@@ -115,8 +110,6 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
                     .filter(
                             detail ->
                                     detail.getStock() >= productSupply.getStock()
-                                            &&
-                                            detail.getPrice() <= productSupply.getPrice()
                     )
                     .stream()
                     .map(
@@ -124,7 +117,6 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
                                     .id(detail.getId())
                                     .productName(detail.getProduct().getName())
                                     .vendorName(detail.getVendor().getNameVendor())
-                                    .price(detail.getPrice())
                                     .stock(detail.getStock())
                                     .build()
                     ).toList();
@@ -138,7 +130,6 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
                                     .id(detail.getId())
                                     .productName(detail.getProduct().getName())
                                     .vendorName(detail.getVendor().getNameVendor())
-                                    .price(detail.getPrice())
                                     .stock(detail.getStock())
                                     .build()
                     ).toList();
@@ -182,7 +173,6 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
                 ProductSupplies.builder()
                         .product(productFound)
                         .vendor(vendorFound)
-                        .price(productSupply.getPrice())
                         .stock(productSupply.getStock())
                         .build()
         );
@@ -191,7 +181,6 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
                 .id(productSupplies.getId())
                 .productName(productSupplies.getProduct().getName())
                 .vendorName(productSupplies.getVendor().getNameVendor())
-                .price(productSupplies.getPrice())
                 .stock(productSupply.getStock())
                 .build();
     }
@@ -205,13 +194,11 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
                 ProductSupplies.builder()
                         .product(productFound)
                         .vendor(vendorFound)
-                        .price(productSupply.getPrice())
                         .stock(productSupply.getStock())
                         .build()
         );
         return ProductSupplyResponse.builder()
                 .id(temp.getId())
-                .price(temp.getPrice())
                 .stock(temp.getStock())
                 .productName(temp.getProduct().getName())
                 .vendorName(temp.getVendor().getNameVendor())
@@ -223,7 +210,6 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
         ProductSupplies byid = getByid(i);
         return ProductSupplyResponse.builder()
                 .id(byid.getId())
-                .price(byid.getPrice())
                 .stock(byid.getStock())
                 .productName(byid.getProduct().getName())
                 .vendorName(byid.getVendor().getNameVendor())

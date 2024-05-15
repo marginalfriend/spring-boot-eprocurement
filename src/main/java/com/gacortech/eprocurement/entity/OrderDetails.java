@@ -31,6 +31,8 @@ public class OrderDetails {
     @JsonBackReference
     private ProductSupplies productSupplies;
 
+    @Column(name = "price", nullable = false)
+    private Integer price;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
