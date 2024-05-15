@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class ReportRequest {
-    private String date;
-    private String month;
+    private String  date;
+    private String  month;
+
+    private Integer page;
+    private Integer size;
 }

@@ -16,12 +16,16 @@ import java.util.List;
 public class ReportController {
     ReportService reportService;
     public ResponseEntity<CommonResponse<List<ReportResponse>>> findAll(
-            @RequestParam(name = "date", required = false) String date,
-            @RequestParam(name = "month", required = false) String month
+            @RequestParam(name = "date",    required = false) String    date,
+            @RequestParam(name = "month",   required = false) String    month,
+            @RequestParam(name = "page",    required = false) Integer   page,
+            @RequestParam(name = "size",    required = false) Integer   size
     ) {
         ReportRequest req = ReportRequest.builder()
                 .date(date)
                 .month(month)
+                .page(page)
+                .size(size)
                 .build();
 
         CommonResponse<List<ReportResponse>> res = reportService.getAll(req);
