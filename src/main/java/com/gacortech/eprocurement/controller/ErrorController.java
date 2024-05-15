@@ -1,6 +1,8 @@
 package com.gacortech.eprocurement.controller;
+import com.gacortech.eprocurement.constant.ResponseMessages;
 import com.gacortech.eprocurement.dto.response.CommonResponse;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,7 +24,6 @@ public class ErrorController {
                 .body(response);
     }
 
-    // tambah error handler untuk validasi
     @ExceptionHandler({ConstraintViolationException.class})
     public ResponseEntity<CommonResponse<?>> constraintViolationExceptionHandler (ConstraintViolationException e) {
         CommonResponse<?> response = CommonResponse.builder()
@@ -34,11 +35,11 @@ public class ErrorController {
                 .body(response);
     }
 
-    @ExceptionHandler({RuntimeException.class})
-    public ResponseEntity<CommonResponse<?>> runtimeExceptionHandler (RuntimeException e) {
+    @ExceptionHandler({DataIntegrityViolationException.class})
+    public ResponseEntity<CommonResponse<?>> runtimeExceptionHandler (DataIntegrityViolationException e) {
         CommonResponse<?> response = CommonResponse.builder()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
-                .message(e.getMessage())
+                .message(ResponseMessages.ERROR_ALREADY_EXISTS)
                 .build();
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)

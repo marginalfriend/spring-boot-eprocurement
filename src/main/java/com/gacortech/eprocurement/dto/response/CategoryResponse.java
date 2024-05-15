@@ -9,6 +9,5 @@ import java.util.List;
 @Builder
 public class CategoryResponse {
     private Integer id;
-    private String categoryName;
-//    private List<ProductResponse> products;
+    private String name;
 }
