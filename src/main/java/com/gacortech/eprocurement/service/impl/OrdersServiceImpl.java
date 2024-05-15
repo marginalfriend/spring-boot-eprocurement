@@ -72,8 +72,8 @@ public class OrdersServiceImpl implements OrdersService {
                             .build();
                 }).toList();
         orderDetailService.createBulk(orderDetails);
-       ordersRepository.saveAndFlush(order);
-       log.info("Check order details: {}", order.getOrderDate());
+        ordersRepository.saveAndFlush(order);
+        log.info("Check order details: {}", order.getOrderDate());
 
 
         List<OrderDetailResponse> savedOrderDetails = orderDetails.stream()
@@ -137,56 +137,28 @@ public class OrdersServiceImpl implements OrdersService {
         return ordersRepository.findAll(specification, pageable);
     }
 
-            @Override
-            public OrdersResponse getById(String id) {
-                Orders orders = ordersRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product Not Found"));
+    @Override
+    public OrdersResponse getById(String id) {
+        Orders orders = ordersRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product Not Found"));
 
 
-                List<OrderDetailResponse> orderDetailResponses = orders.getOrderDetails().stream().map(details -> OrderDetailResponse.builder()
-                        .id(details.getId())
-                        .quantity(details.getQuantity())
-                        .productName(details.getProductSupplies().getProduct().getName())
-                        .price(details.getProductSupplies().getPrice())
-                        .supplyId(details.getProductSupplies().getId())
-                        .totalAmount(details.getProductSupplies().getPrice() * details.getQuantity())
-                        .build())
-                        .toList();
+        List<OrderDetailResponse> orderDetailResponses = orders.getOrderDetails().stream().map(details -> OrderDetailResponse.builder()
+                .id(details.getId())
+                .quantity(details.getQuantity())
+                .productName(details.getProductSupplies().getProduct().getName())
+                .price(details.getProductSupplies().getPrice())
+                .supplyId(details.getProductSupplies().getId())
+                .totalAmount(details.getProductSupplies().getPrice() * details.getQuantity())
+                .build())
+                .toList();
 
-                Integer totalAmount = orders.getOrderDetails().stream().mapToInt(details -> details.getProductSupplies().getPrice()).sum();
-                return OrdersResponse.builder()
-                        .id(id)
-                        .orderDate(String.valueOf(orders.getOrderDate()))
-                        .totalAmount(totalAmount)
-                        .orderDetails(orderDetailResponses)
-                        .build();
-            }
+        Integer totalAmount = orders.getOrderDetails().stream().mapToInt(details -> details.getProductSupplies().getPrice()).sum();
+        return OrdersResponse.builder()
+                .id(id)
+                .orderDate(String.valueOf(orders.getOrderDate()))
+                .totalAmount(totalAmount)
+                .orderDetails(orderDetailResponses)
+                .build();
+    }
 
-            }
-
-
-
-//        List<Orders> orders = ordersRepository.findAll();
-//
-//        return orders.stream().map(order -> {
-//            List<OrderDetailResponse> orderDetailResponse = order.getOrderDetails().stream()
-//                    .map(detail ->{
-//                        return OrderDetailResponse.builder()
-//                                .productId(detail.getId())
-//                                .productName(detail.getProductSupplies().getProduct().getName())
-//                                .quantity(detail.getQuantity())
-//                                .price(detail.getProductSupplies().getPrice())
-//                                .totalAmount(detail.getProductSupplies().getPrice() * detail.getQuantity())
-//                                .build();
-//                    }).toList();
-//
-//            return OrdersResponse.builder()
-//                    .id(order.getId())
-//                    .orderDate(order.getOrderDate().toString())
-//                    .orderDetails(orderDetailResponse)
-//                    .build();
-//
-//        }).toList();
-
-
-
-
+    }
