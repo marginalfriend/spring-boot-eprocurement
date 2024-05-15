@@ -18,4 +18,10 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     public List<OrderDetails> createBulk(List<OrderDetails> orderDetails) {
         return orderDetailsRepository.saveAll(orderDetails);
     }
+
+    @Override
+    public OrderDetails getById(Integer id) {
+    return orderDetailsRepository.findById(String.valueOf(id)).orElseThrow(() ->
+    new RuntimeException("Order not found with id" + id));
+    }
 }

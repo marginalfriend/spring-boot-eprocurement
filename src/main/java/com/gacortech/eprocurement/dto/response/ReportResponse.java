@@ -13,5 +13,5 @@ public class ReportResponse {
     private String purchaseDate;
     private Integer quantity;
     private Integer totalPrice;
-
+    private PagingResponse pagingResponse;
 }
