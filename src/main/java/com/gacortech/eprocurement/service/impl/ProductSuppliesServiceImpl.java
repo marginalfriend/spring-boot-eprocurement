@@ -1,5 +1,6 @@
 package com.gacortech.eprocurement.service.impl;
 
+import com.gacortech.eprocurement.constant.ResponseMessages;
 import com.gacortech.eprocurement.dto.entity_rep.ProductSupply;
 import com.gacortech.eprocurement.entity.ProductSupplies;
 import com.gacortech.eprocurement.entity.Products;
@@ -35,7 +36,7 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
     public ProductSupplies getByid(Integer i) {
         return productSupplyRepository.findById(i)
                 .orElseThrow(
-                        () -> new RuntimeException("Product Supply Not Found")
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, ResponseMessages.ERROR_NOT_FOUND)
                 );
     }
 
