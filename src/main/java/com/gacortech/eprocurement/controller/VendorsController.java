@@ -49,7 +49,7 @@ public class VendorsController {
             @RequestParam(name = "vendorId", required = false) String vendorId,
             @RequestParam(name = "price", required = false) Integer price,
             @RequestParam(name = "stock", required = false) Integer stock
-    ){
+    ) {
         List<ProductSupplyResponse> all = prodSuppSer.getAll(ProductSupply.builder()
                 .id(supplyId)
                 .productId(productId)

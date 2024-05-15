@@ -31,12 +31,13 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
     @Override
     public List<ProductSupplyResponse> getAll(ProductSupply productSupply) {
 
+        // If product supply is null, return all products
         if(     productSupply.getId() == null &&
                 productSupply.getProductId() == null &&
                 productSupply.getVendorId() == null &&
                 productSupply.getPrice() == null &&
                 productSupply.getStock() == null
-        ){
+        ) {
             return productSupplyRepository.findAll().stream().map(
                     detail -> ProductSupplyResponse.builder()
                             .id(detail.getId())
@@ -48,6 +49,7 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
             ).toList();
         }
 
+        // Do quite the opposite of one above
         if(productSupply.getId() != null){
             return productSupplyRepository.findById(productSupply.getId()).stream().map(
                     detail -> ProductSupplyResponse.builder()
