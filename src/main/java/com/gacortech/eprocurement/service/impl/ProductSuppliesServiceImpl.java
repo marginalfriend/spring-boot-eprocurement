@@ -35,7 +35,6 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
         if(     productSupply.getId() == null &&
                 productSupply.getProductId() == null &&
                 productSupply.getVendorId() == null &&
-                productSupply.getPrice() == null &&
                 productSupply.getStock() == null
         ) {
             return productSupplyRepository.findAll().stream().map(
@@ -58,10 +57,6 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
                             .stock(detail.getStock())
                             .build()
             ).toList();
-        }
-
-        if(productSupply.getPrice() == null){
-            productSupply.setPrice(Integer.MAX_VALUE);
         }
 
         if(productSupply.getStock() == null){

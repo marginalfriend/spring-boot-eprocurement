@@ -45,4 +45,15 @@ public class ErrorController {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(response);
     }
+
+    @ExceptionHandler({NullPointerException.class})
+    public ResponseEntity<CommonResponse<?>> runtimeExceptionHandler (NullPointerException e) {
+        CommonResponse<?> response = CommonResponse.builder()
+                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .message(ResponseMessages.ERROR_INTERNAL_SERVER)
+                .build();
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(response);
+    }
 }

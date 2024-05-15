@@ -54,7 +54,6 @@ public class VendorsController {
                 .id(supplyId)
                 .productId(productId)
                 .vendorId(vendorId)
-                .price(price)
                 .stock(stock)
                 .build());
         CommonResponse<List<ProductSupplyResponse>> build = CommonResponse.<List<ProductSupplyResponse>>builder()
@@ -87,19 +86,4 @@ public class VendorsController {
                 .build();
         return ResponseEntity.ok(build);
     }
-
-    @PostMapping(path = "/product-supplies")
-    public ResponseEntity<CommonResponse<ProductSupplyResponse>> addProduct(
-            @RequestBody ProductSupply productSupply
-    ){
-        ProductSupplyResponse productSupplyResponse = prodSuppSer.create(productSupply);
-        CommonResponse<ProductSupplyResponse> build = CommonResponse.<ProductSupplyResponse>builder()
-                .statusCode(HttpStatus.CREATED.value())
-                .message(ResponseMessages.SUCCESS_UPDATE_DATA)
-                .data(productSupplyResponse)
-                .build();
-        return ResponseEntity.ok(build);
-    }
-
-
 }

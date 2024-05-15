@@ -22,12 +22,6 @@ public class ProductSupplySpecification {
                 predicates.add(stock);
             }
 
-            if(productSupply.getPrice() != null){
-                Predicate price = criteriaBuilder.lessThanOrEqualTo(root.get("price"), productSupply.getPrice());
-                predicates.add(price);
-            }
-
-
             return query.where(criteriaBuilder.and(predicates.toArray(new Predicate[]{}))).getRestriction();
         };
     }

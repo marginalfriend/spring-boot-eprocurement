@@ -2,17 +2,17 @@ package com.gacortech.eprocurement.service.impl;
 
 import com.gacortech.eprocurement.constant.ResponseMessages;
 import com.gacortech.eprocurement.dto.entity_rep.OrderDetail;
+import com.gacortech.eprocurement.dto.entity_rep.ProductSupply;
 import com.gacortech.eprocurement.dto.request.OrderRequest;
 import com.gacortech.eprocurement.dto.request.SearchOrderRequest;
 import com.gacortech.eprocurement.dto.response.OrderDetailResponse;
 import com.gacortech.eprocurement.dto.response.OrdersResponse;
+import com.gacortech.eprocurement.dto.response.ProductSupplyResponse;
 import com.gacortech.eprocurement.entity.OrderDetails;
 import com.gacortech.eprocurement.entity.Orders;
 import com.gacortech.eprocurement.entity.ProductSupplies;
 import com.gacortech.eprocurement.repository.OrdersRepository;
-import com.gacortech.eprocurement.service.OrderDetailService;
-import com.gacortech.eprocurement.service.OrdersService;
-import com.gacortech.eprocurement.service.ProductSuppliesService;
+import com.gacortech.eprocurement.service.*;
 import com.gacortech.eprocurement.specification.OrderSpecification;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +44,8 @@ public class OrdersServiceImpl implements OrdersService {
     private final OrdersRepository ordersRepository;
     private final OrderDetailService orderDetailService;
     private final ProductSuppliesService productSuppliesService;
+    private final ProductsService productsService;
+    private final VendorsService vendorsService;
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -59,18 +61,35 @@ public class OrdersServiceImpl implements OrdersService {
 
         List<OrderDetails> orderDetails = request.getOrderDetails().stream()
                 .map(detail -> {
-                    log.info("Quantity dari detail request: {}", detail.getQuantity());
-                    ProductSupplies productSupplies = productSuppliesService.getByid(detail.getProductSupplyId());
+                    ProductSupplies productSupplies;
+                    String vendorId = detail.getVendorId();
+                    String productId = detail.getProductId();
 
+                    if (detail.getProductSupplyId() != null) {
 
-                    productSupplies.setStock(productSupplies.getStock() + detail.getQuantity());
+                        productSupplies = productSuppliesService.getByid(detail.getProductSupplyId());
+                        productSupplies.setStock(productSupplies.getStock() + detail.getQuantity());
+
+                    } else if (vendorId != null &&  productId != null) {
+
+                        ProductSupplyResponse psr = productSuppliesService.create(ProductSupply.builder().productId(productId).vendorId(vendorId).build());
+                        productSupplies = productSuppliesService.getByid(psr.getId());
+                        productSupplies.setStock(detail.getQuantity());
+
+                    } else {
+
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Either productId and vendorId or productSupplyId is required");
+
+                    }
 
                     return OrderDetails.builder()
                             .orders(order)
                             .productSupplies(productSupplies)
                             .quantity(detail.getQuantity())
+                            .price(detail.getPrice())
                             .build();
                 }).toList();
+
         orderDetailService.createBulk(orderDetails);
         ordersRepository.saveAndFlush(order);
         log.info("Check order details: {}", order.getOrderDate());
