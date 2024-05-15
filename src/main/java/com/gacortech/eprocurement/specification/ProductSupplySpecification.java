@@ -2,6 +2,7 @@ package com.gacortech.eprocurement.specification;
 
 import com.gacortech.eprocurement.dto.entity_rep.ProductSupply;
 import com.gacortech.eprocurement.entity.ProductSupplies;
+import com.gacortech.eprocurement.entity.Vendors;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -16,11 +17,16 @@ public class ProductSupplySpecification {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            Predicate prdctIdPred =  criteriaBuilder.equal(root.get("product"), productSupply.getProductId());
-            predicates.add(prdctIdPred);
+            if(productSupply.getStock() != null){
+                Predicate stock = criteriaBuilder.greaterThanOrEqualTo(root.get("stock"), productSupply.getStock());
+                predicates.add(stock);
+            }
 
-            Predicate vendorId = criteriaBuilder.equal(root.get("vendor"), productSupply.getVendorId());
-            predicates.add(vendorId);
+            if(productSupply.getPrice() != null){
+                Predicate price = criteriaBuilder.lessThanOrEqualTo(root.get("price"), productSupply.getPrice());
+                predicates.add(price);
+            }
+
 
             return query.where(criteriaBuilder.and(predicates.toArray(new Predicate[]{}))).getRestriction();
         };

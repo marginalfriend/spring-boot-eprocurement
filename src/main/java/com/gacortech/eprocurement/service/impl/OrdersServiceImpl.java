@@ -78,7 +78,7 @@ public class OrdersServiceImpl implements OrdersService {
                 .map(detail -> {
                     return OrderDetailResponse.builder()
                             .id(detail.getId())
-                            .supplyId(Integer.valueOf(detail.getId()))
+                            .supplyId(detail.getProductSupplies().getId())
                             .productName(detail.getProductSupplies().getProduct().getName())
                             .quantity(detail.getQuantity())
                             .price(detail.getProductSupplies().getPrice())
