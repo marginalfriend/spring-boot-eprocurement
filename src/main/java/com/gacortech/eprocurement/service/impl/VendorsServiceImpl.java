@@ -20,11 +20,12 @@ public class VendorsServiceImpl implements VendorsService {
 
     @Override
     public Vendor create(Vendor vendor) {
-        vendorsRepository.saveAndFlush(
+        Vendors vendors = vendorsRepository.saveAndFlush(
                 Vendors.builder()
                         .nameVendor(vendor.getName())
                         .build()
         );
+        vendor.setId(vendors.getId());
         return vendor;
     }
 

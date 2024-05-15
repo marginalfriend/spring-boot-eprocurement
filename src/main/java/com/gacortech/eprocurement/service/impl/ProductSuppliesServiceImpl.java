@@ -134,9 +134,11 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
 
                 )
                 .collect(Collectors.toSet());
+
         if(!collect.isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, ResponseMessages.ERROR_ALREADY_EXISTS);
         }
+
         ProductSupplies productSupplies = productSupplyRepository.saveAndFlush(
                 ProductSupplies.builder()
                         .product(productFound)
