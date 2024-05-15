@@ -27,8 +27,6 @@ public class Orders {
 
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderDetails> orderDetails;
-    
-
 
 }
 
