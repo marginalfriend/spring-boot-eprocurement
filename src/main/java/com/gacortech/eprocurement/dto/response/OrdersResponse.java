@@ -11,8 +11,6 @@ import java.util.List;
 public class OrdersResponse {
     private String id;
     private String orderDate;
-    private String customerName;
-    private String status;
     private Double totalAmount;
     private List<OrderDetailResponse> orderDetails;
 
