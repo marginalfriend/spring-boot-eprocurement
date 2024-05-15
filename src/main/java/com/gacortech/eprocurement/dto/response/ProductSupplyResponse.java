@@ -14,5 +14,4 @@ public class ProductSupplyResponse {
     String  productName;
     String  vendorName;
     Integer stock;
-    Integer price;
 }

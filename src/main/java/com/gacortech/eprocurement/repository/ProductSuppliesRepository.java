@@ -13,7 +13,6 @@ import java.util.List;
 @Repository
 public interface ProductSuppliesRepository extends JpaRepository<ProductSupplies, Integer>, JpaSpecificationExecutor<ProductSupplies> {
 
-    Streamable<ProductSupplies> findByPriceLessThan(Integer price);
     Streamable<ProductSupplies> findByVendorAndProduct(Vendors vendor, Products product);
     Streamable<ProductSupplies> findByVendorOrProduct(Vendors vendor, Products product);
 }

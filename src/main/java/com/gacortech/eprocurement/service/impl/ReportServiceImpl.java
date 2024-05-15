@@ -16,7 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -75,7 +77,7 @@ public class ReportServiceImpl implements ReportService {
                                 .vendorName(vendor.getNameVendor())
                                 .purchaseDate(order.getOrderDate().toString())
                                 .quantity(detail.getQuantity())
-                                .totalPrice(detail.getProductSupplies().getPrice() * detail.getQuantity())
+                                .totalPrice(detail.getPrice() * detail.getQuantity())
                                 .build()
                 );
             });

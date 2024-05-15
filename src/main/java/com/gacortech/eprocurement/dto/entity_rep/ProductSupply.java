@@ -16,5 +16,4 @@ public class ProductSupply {
     private String productId;
     private String vendorId;
     private Integer stock;
-    private Integer price;
 }
