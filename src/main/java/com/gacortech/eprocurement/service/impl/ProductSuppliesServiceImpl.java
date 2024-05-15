@@ -101,7 +101,7 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
                                     .stock(detail.getStock())
                                     .build()
                     ).toList();
-        } else if (productSupply.getVendorId() != null || productSupply.getProductId() != null) {
+        } else {
             temp = productSupplyRepository
                     .findByVendorOrProduct(
                             vendors,
@@ -113,19 +113,6 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
                     )
                     .stream()
                     .map(
-                            detail -> ProductSupplyResponse.builder()
-                                    .id(detail.getId())
-                                    .productName(detail.getProduct().getName())
-                                    .vendorName(detail.getVendor().getNameVendor())
-                                    .stock(detail.getStock())
-                                    .build()
-                    ).toList();
-        }else{
-            temp = productSupplyRepository
-                    .findByPriceLessThan(productSupply.getPrice())
-                    .filter(
-                            detail -> detail.getStock() >= productSupply.getStock()
-                    ).stream().map(
                             detail -> ProductSupplyResponse.builder()
                                     .id(detail.getId())
                                     .productName(detail.getProduct().getName())

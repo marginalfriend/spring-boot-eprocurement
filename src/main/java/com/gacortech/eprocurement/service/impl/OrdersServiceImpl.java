@@ -44,7 +44,6 @@ public class OrdersServiceImpl implements OrdersService {
     private final OrdersRepository ordersRepository;
     private final OrderDetailService orderDetailService;
     private final ProductSuppliesService productSuppliesService;
-    private  final EntityManager entityManager;
 
 
     @Transactional(rollbackFor = Exception.class)
