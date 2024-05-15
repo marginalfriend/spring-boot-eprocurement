@@ -1,6 +1,7 @@
 package com.gacortech.eprocurement.specification;
 
 import com.gacortech.eprocurement.dto.entity_rep.Product;
+import com.gacortech.eprocurement.dto.request.SearchProductRequest;
 import com.gacortech.eprocurement.dto.response.ProductResponse;
 import com.gacortech.eprocurement.entity.Products;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductSpecification {
-    public static Specification<Products> getSpecification(Product request){
+    public static Specification<Products> getSpecification(SearchProductRequest request){
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             if(request.getName() != null){

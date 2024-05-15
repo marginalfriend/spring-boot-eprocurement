@@ -1,5 +1,6 @@
 package com.gacortech.eprocurement.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.gacortech.eprocurement.constant.Tables;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -25,5 +26,6 @@ public class Categories {
     private String name;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Products> products;
 }

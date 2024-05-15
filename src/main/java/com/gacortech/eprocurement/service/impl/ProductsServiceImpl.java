@@ -2,6 +2,7 @@ package com.gacortech.eprocurement.service.impl;
 
 import com.gacortech.eprocurement.constant.ResponseMessages;
 import com.gacortech.eprocurement.dto.entity_rep.Product;
+import com.gacortech.eprocurement.dto.request.SearchProductRequest;
 import com.gacortech.eprocurement.dto.response.ProductResponse;
 import com.gacortech.eprocurement.entity.Products;
 import com.gacortech.eprocurement.repository.ProductsRepository;
@@ -9,6 +10,10 @@ import com.gacortech.eprocurement.service.CategoriesService;
 import com.gacortech.eprocurement.service.ProductsService;
 import com.gacortech.eprocurement.specification.ProductSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -54,16 +59,47 @@ public class ProductsServiceImpl implements ProductsService {
     }
 
     @Override
-    public List<ProductResponse> getAll(Product request) {
+    public Page<Products> getAll(SearchProductRequest request) {
+        if(request.getPage() <= 0){
+            request.setPage(1);
+        }
+
+        String validSortBy;
+        if("name".equalsIgnoreCase(request.getSortBy())){
+            validSortBy = request.getSortBy();
+        } else {
+            validSortBy = "name";
+        }
+        Sort sort = Sort.by(Sort.Direction.fromString(request.getDirection()), validSortBy);
+        Pageable pageable = PageRequest.of((request.getPage()-1), request.getSize(), sort);
         Specification<Products> specification = ProductSpecification.getSpecification(request);
-        List<Products> products = productsRepository.findAll(specification);
-        return products.stream()
-                .map(prd -> ProductResponse.builder()
-                        .id(prd.getId())
-                        .productName(prd.getName())
-                        .categoryId(prd.getCategory().getId())
-                        .build()).toList();
+        return productsRepository.findAll(specification, pageable);
     }
+
+    //    @Override
+//    public Page<ProductResponse> getAll(SearchProductRequest request) {
+//        if(request.getPage() <= 0){
+//            request.setPage(1);
+//        }
+//
+//        String validSortBy;
+//        if("name".equalsIgnoreCase(request.getSortBy())){
+//            validSortBy = request.getSortBy();
+//        } else {
+//            validSortBy = "name";
+//        }
+//
+//        Sort sort = Sort.by(Sort.Direction.fromString(request.getDirection()), validSortBy);
+//        Pageable pageable = PageRequest.of((request.getPage()-1), request.getSize(), sort);
+//        Specification<Products> specification = ProductSpecification.getSpecification(request);
+//        productsRepository.findAll(specification, pageable);
+////        return products.stream()
+////                .map(prd -> ProductResponse.builder()
+////                        .id(prd.getId())
+////                        .productName(prd.getName())
+////                        .categoryId(prd.getCategory().getId())
+////                        .build()).toList();
+//    }
 
     @Override
     public ProductResponse update(Product request) {
