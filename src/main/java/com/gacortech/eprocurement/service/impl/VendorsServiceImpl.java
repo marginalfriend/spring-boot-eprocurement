@@ -65,6 +65,7 @@ public class VendorsServiceImpl implements VendorsService {
     public List<Vendor> getAll(String name) {
         return vendorsRepository.findAll().stream().map(
                 detail -> Vendor.builder()
+                        .id(detail.getId())
                         .name(detail.getNameVendor())
                         .build()
         ).toList();
