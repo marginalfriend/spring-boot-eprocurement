@@ -66,7 +66,6 @@ public class OrdersController {
 
 
         SearchOrderRequest request = SearchOrderRequest.builder()
-
                 .Date(Date)
                 .maxAmount(maxAmount)
                 .minAmount(minAmount)
