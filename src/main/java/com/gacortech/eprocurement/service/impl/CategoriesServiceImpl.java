@@ -7,7 +7,9 @@ import com.gacortech.eprocurement.dto.response.ProductResponse;
 import com.gacortech.eprocurement.entity.Categories;
 import com.gacortech.eprocurement.repository.CategoriesRepository;
 import com.gacortech.eprocurement.service.CategoriesService;
+import com.gacortech.eprocurement.specification.CategorySpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -48,8 +50,9 @@ public class CategoriesServiceImpl implements CategoriesService {
     }
 
     @Override
-    public List<CategoryResponse> getAll() {
-        List<Categories> categories = categoriesRepository.findAll();
+    public List<CategoryResponse> getAll(Category request) {
+        Specification<Categories> specification = CategorySpecification.getSpecification(request);
+        List<Categories> categories = categoriesRepository.findAll(specification);
         return categories.stream()
                 .map(ctg -> {
                     List<ProductResponse> productResponse = ctg.getProducts().stream()
@@ -57,7 +60,7 @@ public class CategoriesServiceImpl implements CategoriesService {
                                         return ProductResponse.builder()
                                                 .id(prd.getId())
                                                 .productName(prd.getName())
-                                                .categoryId(prd.getCategoryId().getId())
+                                                .categoryId(prd.getCategory().getId())
                                                 .build();
                                     }).toList();
                     return CategoryResponse.builder()
