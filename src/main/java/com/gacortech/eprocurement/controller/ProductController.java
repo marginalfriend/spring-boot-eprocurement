@@ -21,8 +21,15 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ProductResponse> showAllProduct(){
-        return productsService.getAll();
+    public List<ProductResponse> showAllProduct(
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "categoryId", required = false) Integer categoryId
+    ){
+        Product product = Product.builder()
+                .name(name)
+                .categoryId(categoryId)
+                .build();
+        return productsService.getAll(product);
     }
 
     @GetMapping(path = "/{id}")

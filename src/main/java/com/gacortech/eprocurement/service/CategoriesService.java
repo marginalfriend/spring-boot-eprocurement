@@ -10,6 +10,6 @@ public interface CategoriesService {
     CategoryResponse create(Category request);
     CategoryResponse getById(Integer id);
     Categories entityById(Integer id);
-    List<CategoryResponse> getAll();
+    List<CategoryResponse> getAll(Category request);
     CategoryResponse update(Category request);
 }

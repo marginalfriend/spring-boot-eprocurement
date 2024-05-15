@@ -10,6 +10,6 @@ public interface ProductsService {
     ProductResponse create(Product request);
     ProductResponse getById(String id);
     Products entityId(String id);
-    List<ProductResponse> getAll();
+    List<ProductResponse> getAll(Product request);
     ProductResponse update(Product request);
 }

@@ -7,7 +7,9 @@ import com.gacortech.eprocurement.entity.Products;
 import com.gacortech.eprocurement.repository.ProductsRepository;
 import com.gacortech.eprocurement.service.CategoriesService;
 import com.gacortech.eprocurement.service.ProductsService;
+import com.gacortech.eprocurement.specification.ProductSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -24,13 +26,13 @@ public class ProductsServiceImpl implements ProductsService {
     public ProductResponse create(Product request) {
         Products newProduct = Products.builder()
                 .name(request.getName())
-                .categoryId(categoriesService.entityById(request.getCategoryId()))
+                .category(categoriesService.entityById(request.getCategoryId()))
                 .build();
         productsRepository.saveAndFlush(newProduct);
         return ProductResponse.builder()
                 .id(newProduct.getId())
                 .productName(newProduct.getName())
-                .categoryId(newProduct.getCategoryId().getId())
+                .categoryId(newProduct.getCategory().getId())
                 .build();
     }
 
@@ -41,7 +43,7 @@ public class ProductsServiceImpl implements ProductsService {
         return ProductResponse.builder()
                 .id(productFound.getId())
                 .productName(productFound.getName())
-                .categoryId(productFound.getCategoryId().getId())
+                .categoryId(productFound.getCategory().getId())
                 .build();
     }
 
@@ -52,13 +54,14 @@ public class ProductsServiceImpl implements ProductsService {
     }
 
     @Override
-    public List<ProductResponse> getAll() {
-        List<Products> products = productsRepository.findAll();
+    public List<ProductResponse> getAll(Product request) {
+        Specification<Products> specification = ProductSpecification.getSpecification(request);
+        List<Products> products = productsRepository.findAll(specification);
         return products.stream()
                 .map(prd -> ProductResponse.builder()
                         .id(prd.getId())
                         .productName(prd.getName())
-                        .categoryId(prd.getCategoryId().getId())
+                        .categoryId(prd.getCategory().getId())
                         .build()).toList();
     }
 
@@ -69,7 +72,7 @@ public class ProductsServiceImpl implements ProductsService {
         return ProductResponse.builder()
                 .id(updateProduct.getId())
                 .productName(updateProduct.getName())
-                .categoryId(updateProduct.getCategoryId().getId())
+                .categoryId(updateProduct.getCategory().getId())
                 .build();
     }
 
