@@ -5,6 +5,7 @@ import com.gacortech.eprocurement.constant.Tables;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -21,9 +22,8 @@ public class Orders {
     private String id;
 
     @Column(name = "order_date", nullable = false)
-    @Temporal(TemporalType.DATE)
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate orderDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Timestamp orderDate;
 
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderDetails> orderDetails;
