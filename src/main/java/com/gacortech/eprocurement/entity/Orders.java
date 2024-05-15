@@ -1,5 +1,6 @@
 package com.gacortech.eprocurement.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gacortech.eprocurement.constant.Tables;
 import jakarta.persistence.*;
@@ -25,7 +26,7 @@ public class Orders {
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp orderDate;
 
-    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
     private List<OrderDetails> orderDetails;
 
 }
