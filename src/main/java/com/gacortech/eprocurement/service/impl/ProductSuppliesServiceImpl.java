@@ -2,6 +2,7 @@ package com.gacortech.eprocurement.service.impl;
 
 import com.gacortech.eprocurement.constant.ResponseMessages;
 import com.gacortech.eprocurement.dto.entity_rep.ProductSupply;
+import com.gacortech.eprocurement.dto.response.ProductSupplyResponse;
 import com.gacortech.eprocurement.entity.ProductSupplies;
 import com.gacortech.eprocurement.entity.Products;
 import com.gacortech.eprocurement.entity.Vendors;
@@ -27,9 +28,16 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
     private final ProductsServiceImpl productsService;
     private final VendorsServiceImpl vendorsService;
     @Override
-    public List<ProductSupplies> getAll() {
-
-        return productSupplyRepository.findAll();
+    public List<ProductSupplyResponse> getAll() {
+        return productSupplyRepository.findAll().stream().map(
+                detail -> ProductSupplyResponse.builder()
+                        .id(detail.getId())
+                        .productName(detail.getProduct().getName())
+                        .vendorName(detail.getVendor().getNameVendor())
+                        .price(detail.getPrice())
+                        .stock(detail.getPrice())
+                        .build()
+        ).toList();
     }
 
     @Override
@@ -41,12 +49,12 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
     }
 
     @Override
-    public ProductSupplies create(ProductSupply productSupply) {
+    public ProductSupplyResponse create(ProductSupply productSupply) {
 
         Products productFound = productsService.findByIdOrThrowNotFound(productSupply.getProductId());
         Vendors vendorFound = vendorsService.entityById(productSupply.getVendorId());
 
-        Set<ProductSupplies> collect = getAll().stream()
+        Set<ProductSupplies> collect = productSupplyRepository.findAll().stream()
                 .filter(productSupplies ->
                         productSupplies.getProduct().equals(productFound)
                                 &&
@@ -57,7 +65,7 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
         if(!collect.isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, ResponseMessages.ERROR_ALREADY_EXISTS);
         }
-        return productSupplyRepository.saveAndFlush(
+        ProductSupplies productSupplies = productSupplyRepository.saveAndFlush(
                 ProductSupplies.builder()
                         .product(productFound)
                         .vendor(vendorFound)
@@ -65,16 +73,22 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
                         .stock(productSupply.getStock())
                         .build()
         );
+
+        return ProductSupplyResponse.builder()
+                .id(productSupplies.getId())
+                .productName(productSupplies.getProduct().getName())
+                .vendorName(productSupplies.getVendor().getNameVendor())
+                .price(productSupplies.getPrice())
+                .stock(productSupply.getStock())
+                .build();
     }
 
-
-
     @Override
-    public ProductSupplies update(ProductSupply productSupply) {
+    public ProductSupplyResponse update(ProductSupply productSupply) {
         getByid(productSupply.getId());
         Products productFound = productsService.findByIdOrThrowNotFound(productSupply.getProductId());
         Vendors vendorFound = vendorsService.entityById(productSupply.getVendorId());
-        return productSupplyRepository.saveAndFlush(
+        ProductSupplies temp = productSupplyRepository.saveAndFlush(
                 ProductSupplies.builder()
                         .product(productFound)
                         .vendor(vendorFound)
@@ -82,5 +96,12 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
                         .stock(productSupply.getStock())
                         .build()
         );
+        return ProductSupplyResponse.builder()
+                .id(temp.getId())
+                .price(temp.getPrice())
+                .stock(temp.getStock())
+                .productName(temp.getProduct().getName())
+                .vendorName(temp.getVendor().getNameVendor())
+                .build();
     }
 }
