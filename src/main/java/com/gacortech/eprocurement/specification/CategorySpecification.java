@@ -1,9 +1,7 @@
 package com.gacortech.eprocurement.specification;
 
-import com.gacortech.eprocurement.dto.entity_rep.Product;
-import com.gacortech.eprocurement.dto.request.SearchProductRequest;
-import com.gacortech.eprocurement.dto.response.ProductResponse;
-import com.gacortech.eprocurement.entity.Products;
+import com.gacortech.eprocurement.dto.entity_rep.Category;
+import com.gacortech.eprocurement.entity.Categories;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
@@ -13,8 +11,8 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductSpecification {
-    public static Specification<Products> getSpecification(SearchProductRequest request){
+public class CategorySpecification {
+    public static Specification<Categories> getSpecification(Category request){
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             if(request.getName() != null){
@@ -25,14 +23,6 @@ public class ProductSpecification {
                         )
                 );
             }
-
-            if(request.getCategoryId() != null){
-                predicates.add(
-                        criteriaBuilder.equal(root.get("category").get("id"),
-                        request.getCategoryId())
-                );
-            }
-
             return query.where(predicates.toArray(new Predicate[]{})).getRestriction();
         };
     }

@@ -24,8 +24,13 @@ public class CategoriesController {
     }
 
     @GetMapping
-    public List<CategoryResponse> showAllCategories(){
-        return categoriesService.getAll();
+    public List<CategoryResponse> showAllCategories(
+            @RequestParam(name = "name", required = false) String name
+    ){
+        Category category = Category.builder()
+                .name(name)
+                .build();
+        return categoriesService.getAll(category);
     }
 
     @GetMapping(path = "/{id}")
