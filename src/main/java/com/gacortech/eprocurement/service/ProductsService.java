@@ -6,8 +6,6 @@ import com.gacortech.eprocurement.dto.response.ProductResponse;
 import com.gacortech.eprocurement.entity.Products;
 import org.springframework.data.domain.Page;
 
-import java.util.List;
-
 public interface ProductsService {
     ProductResponse create(Product request);
     ProductResponse getById(String id);

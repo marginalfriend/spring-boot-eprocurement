@@ -66,7 +66,6 @@ public class CategoriesServiceImpl implements CategoriesService {
                     return CategoryResponse.builder()
                             .id(ctg.getId())
                             .categoryName(ctg.getName())
-                            .products(productResponse)
                             .build();
                 }).toList();
     }
