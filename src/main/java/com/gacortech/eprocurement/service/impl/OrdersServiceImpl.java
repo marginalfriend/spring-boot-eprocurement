@@ -83,15 +83,15 @@ public class OrdersServiceImpl implements OrdersService {
                         .supplyId(detail.getProductSupplies().getId())
                         .productName(detail.getProductSupplies().getProduct().getName())
                         .quantity(detail.getQuantity())
-                        .price(detail.getProductSupplies().getPrice())
-                        .totalAmount(detail.getProductSupplies().getPrice() * detail.getQuantity())
+                        .price(detail.getPrice())
+                        .totalAmount(detail.getPrice() * detail.getQuantity())
                         .build()).toList();
 
         return OrdersResponse.builder()
                 .id(order.getId())
                 .orderDate(order.getOrderDate().toString())
                 .orderDetails(savedOrderDetails)
-                .totalAmount(orderDetails.stream().mapToInt(od -> od.getProductSupplies().getPrice()).sum())
+                .totalAmount(orderDetails.stream().mapToInt(OrderDetails::getPrice).sum())
                 .build();
     }
 
@@ -148,13 +148,13 @@ public class OrdersServiceImpl implements OrdersService {
                 .id(details.getId())
                 .quantity(details.getQuantity())
                 .productName(details.getProductSupplies().getProduct().getName())
-                .price(details.getProductSupplies().getPrice())
+                .price(details.getPrice())
                 .supplyId(details.getProductSupplies().getId())
-                .totalAmount(details.getProductSupplies().getPrice() * details.getQuantity())
+                .totalAmount(details.getPrice() * details.getQuantity())
                 .build())
                 .toList();
 
-        Integer totalAmount = orders.getOrderDetails().stream().mapToInt(details -> details.getProductSupplies().getPrice()).sum();
+        Integer totalAmount = orders.getOrderDetails().stream().mapToInt(OrderDetails::getPrice).sum();
         return OrdersResponse.builder()
                 .id(id)
                 .orderDate(String.valueOf(orders.getOrderDate()))
