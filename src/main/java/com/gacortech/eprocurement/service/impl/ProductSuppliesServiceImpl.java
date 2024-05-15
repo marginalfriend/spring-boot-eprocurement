@@ -51,7 +51,7 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
     @Override
     public ProductSupplyResponse create(ProductSupply productSupply) {
 
-        Products productFound = productsService.findByIdOrThrowNotFound(productSupply.getProductId());
+        Products productFound = productsService.entityId(productSupply.getProductId());
         Vendors vendorFound = vendorsService.entityById(productSupply.getVendorId());
 
         Set<ProductSupplies> collect = productSupplyRepository.findAll().stream()
@@ -86,7 +86,7 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
     @Override
     public ProductSupplyResponse update(ProductSupply productSupply) {
         getByid(productSupply.getId());
-        Products productFound = productsService.findByIdOrThrowNotFound(productSupply.getProductId());
+        Products productFound = productsService.entityId(productSupply.getProductId());
         Vendors vendorFound = vendorsService.entityById(productSupply.getVendorId());
         ProductSupplies temp = productSupplyRepository.saveAndFlush(
                 ProductSupplies.builder()
