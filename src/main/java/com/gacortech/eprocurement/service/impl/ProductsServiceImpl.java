@@ -19,8 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class ProductsServiceImpl implements ProductsService {
@@ -75,31 +73,6 @@ public class ProductsServiceImpl implements ProductsService {
         Specification<Products> specification = ProductSpecification.getSpecification(request);
         return productsRepository.findAll(specification, pageable);
     }
-
-    //    @Override
-//    public Page<ProductResponse> getAll(SearchProductRequest request) {
-//        if(request.getPage() <= 0){
-//            request.setPage(1);
-//        }
-//
-//        String validSortBy;
-//        if("name".equalsIgnoreCase(request.getSortBy())){
-//            validSortBy = request.getSortBy();
-//        } else {
-//            validSortBy = "name";
-//        }
-//
-//        Sort sort = Sort.by(Sort.Direction.fromString(request.getDirection()), validSortBy);
-//        Pageable pageable = PageRequest.of((request.getPage()-1), request.getSize(), sort);
-//        Specification<Products> specification = ProductSpecification.getSpecification(request);
-//        productsRepository.findAll(specification, pageable);
-////        return products.stream()
-////                .map(prd -> ProductResponse.builder()
-////                        .id(prd.getId())
-////                        .productName(prd.getName())
-////                        .categoryId(prd.getCategory().getId())
-////                        .build()).toList();
-//    }
 
     @Override
     public ProductResponse update(Product request) {
