@@ -8,10 +8,9 @@ import com.gacortech.eprocurement.entity.OrderDetails;
 import com.gacortech.eprocurement.entity.Orders;
 import com.gacortech.eprocurement.entity.ProductSupplies;
 import com.gacortech.eprocurement.repository.OrdersRepository;
-import com.gacortech.eprocurement.repository.ProductSupplyRepository;
 import com.gacortech.eprocurement.service.OrderDetailService;
 import com.gacortech.eprocurement.service.OrdersService;
-import com.gacortech.eprocurement.service.ProductsService;
+import com.gacortech.eprocurement.service.ProductSuppliesService;
 import com.gacortech.eprocurement.specification.OrderSpecification;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +21,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @RequiredArgsConstructor
@@ -35,8 +38,8 @@ public class OrdersServiceImpl implements OrdersService {
 
     private static final Logger log = LoggerFactory.getLogger(OrdersServiceImpl.class);
     private final OrdersRepository ordersRepository;
-    private final ProductsService productSuppliesRepository;
     private final OrderDetailService orderDetailService;
+    private final ProductSuppliesService productSuppliesService;
     private  final EntityManager entityManager;
 
 
@@ -55,13 +58,13 @@ public class OrdersServiceImpl implements OrdersService {
         List<OrderDetails> orderDetails = request.getOrderDetails().stream()
                 .map(detail -> {
                     log.info("Quantity dari detail request: {}", detail.getQuantity());
-                    ProductSupplies productSupplies = ProductSupplyRepository.getById(detail.getProductSupplyId());
+                    ProductSupplies productSupplies = productSuppliesService.getByid(detail.getProductSupplyId());
 
-                    if (productSupplies.getQuantity() < detail.getQuantity()) {
+                    if (productSupplies.getStock() < detail.getQuantity()) {
                         throw new IllegalArgumentException("Insufficient product quantity");
                     }
 
-                    productSupplies.setQuantity(productSupplies.getQuantity() - detail.getQuantity());
+                    productSupplies.setStock(productSupplies.getStock() - detail.getQuantity());
 
                     return OrderDetails.builder()
                             .orders(order)
@@ -76,7 +79,8 @@ public class OrdersServiceImpl implements OrdersService {
         List<OrderDetailResponse> savedOrderDetails = orderDetails.stream()
                 .map(detail -> {
                     return OrderDetailResponse.builder()
-                            .productId(detail.getId())
+                            .id(detail.getId())
+                            .supplyId(detail.getId())
                             .productName(detail.getProductSupplies().getProduct().getName())
                             .quantity(detail.getQuantity())
                             .price(detail.getProductSupplies().getPrice())
@@ -120,6 +124,24 @@ public class OrdersServiceImpl implements OrdersService {
         Specification<Orders> specification = OrderSpecification.getSpecification(request);
         return ordersRepository.findAll(specification, pageable);
     }
+
+            @Override
+            public OrdersResponse getById(String id) {
+                Optional<Orders> optionalOrders = ordersRepository.findById(id);
+                if(optionalOrders.isEmpty()){
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product Not Found");
+                }
+                Orders orders = optionalOrders.get();
+                Integer totalAmount = orders.getOrderDetails().stream().mapToInt(details -> details.getProductSupplies().getPrice()).sum();
+                return OrdersResponse.builder()
+                    .id(id)
+                    .orderDate(String.valueOf(orders.getOrderDate()))
+                    .totalAmount(totalAmount)
+                    .build();
+            }
+
+
+
 //        List<Orders> orders = ordersRepository.findAll();
 //
 //        return orders.stream().map(order -> {
