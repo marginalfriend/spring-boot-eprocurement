@@ -3,6 +3,7 @@ package com.gacortech.eprocurement.service.impl;
 import com.gacortech.eprocurement.constant.ResponseMessages;
 import com.gacortech.eprocurement.dto.entity_rep.Category;
 import com.gacortech.eprocurement.dto.response.CategoryResponse;
+import com.gacortech.eprocurement.dto.response.ProductResponse;
 import com.gacortech.eprocurement.entity.Categories;
 import com.gacortech.eprocurement.repository.CategoriesRepository;
 import com.gacortech.eprocurement.service.CategoriesService;
@@ -50,10 +51,21 @@ public class CategoriesServiceImpl implements CategoriesService {
     public List<CategoryResponse> getAll() {
         List<Categories> categories = categoriesRepository.findAll();
         return categories.stream()
-                .map(ctg -> CategoryResponse.builder()
-                        .id(ctg.getId())
-                        .categoryName(ctg.getName())
-                        .build()).toList();
+                .map(ctg -> {
+                    List<ProductResponse> productResponse = ctg.getProducts().stream()
+                                    .map(prd -> {
+                                        return ProductResponse.builder()
+                                                .id(prd.getId())
+                                                .productName(prd.getName())
+                                                .categoryId(prd.getCategoryId().getId())
+                                                .build();
+                                    }).toList();
+                    return CategoryResponse.builder()
+                            .id(ctg.getId())
+                            .categoryName(ctg.getName())
+                            .products(productResponse)
+                            .build();
+                }).toList();
     }
 
     @Override
