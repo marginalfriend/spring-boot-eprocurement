@@ -53,12 +53,9 @@ public class OrdersController {
 
     @GetMapping
     public ResponseEntity<CommonResponse< List<Orders>>> getAllOrders(
-            @RequestParam(name = "Date", required = false) @JsonFormat(pattern = "yyyy-MM-dd") String Date,
-            @RequestParam(name = "maxAmount", required = false) Integer maxAmount,
-            @RequestParam(name = "minAmount", required = false) Integer minAmount,
-            @RequestParam(name = "startFrom", required = false) String startFrom,
-            @RequestParam(name = "endTo", required = false) String endTo,
-            @RequestParam(name = "sortBy", required = false) String sortBy,
+            @RequestParam(name = "date", required = false) String date,
+            @RequestParam(name = "month", required = false) String month,
+            @RequestParam(name = "sortBy",required = false) String sortBy,
             @RequestParam(name = "direction", required = false) String direction,
             @RequestParam(name = "page", required = false) Integer page,
             @RequestParam(name = "size", required = false) Integer size
@@ -66,11 +63,8 @@ public class OrdersController {
 
 
         SearchOrderRequest request = SearchOrderRequest.builder()
-                .Date(Date)
-                .maxAmount(maxAmount)
-                .minAmount(minAmount)
-                .startFrom(startFrom)
-                .endTo(endTo)
+                .date(date)
+                .month(month)
                 .sortBy(sortBy)
                 .direction(direction)
                 .page(page)

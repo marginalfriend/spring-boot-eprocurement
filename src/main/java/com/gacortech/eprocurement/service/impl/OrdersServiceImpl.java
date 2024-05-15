@@ -26,8 +26,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -48,7 +50,7 @@ public class OrdersServiceImpl implements OrdersService {
     public OrdersResponse create(OrderRequest request){
 
         Orders order = Orders.builder()
-                .orderDate(LocalDate.now())
+                .orderDate(new Timestamp(new Date().getTime()))
                 .build();
 
         ordersRepository.saveAndFlush(order);
@@ -59,11 +61,8 @@ public class OrdersServiceImpl implements OrdersService {
                     log.info("Quantity dari detail request: {}", detail.getQuantity());
                     ProductSupplies productSupplies = productSuppliesService.getByid(detail.getProductSupplyId());
 
-                    if (productSupplies.getStock() < detail.getQuantity()) {
-                        throw new IllegalArgumentException("Insufficient product quantity");
-                    }
 
-                    productSupplies.setStock(productSupplies.getStock() - detail.getQuantity());
+                    productSupplies.setStock(productSupplies.getStock() + detail.getQuantity());
 
                     return OrderDetails.builder()
                             .orders(order)
