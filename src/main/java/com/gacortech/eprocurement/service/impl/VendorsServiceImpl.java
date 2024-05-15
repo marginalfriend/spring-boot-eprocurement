@@ -19,28 +19,41 @@ public class VendorsServiceImpl implements VendorsService {
     private final VendorsRepository vendorsRepository;
 
     @Override
-    public Vendors create(Vendor vendor) {
-
-        return vendorsRepository.saveAndFlush(
+    public Vendor create(Vendor vendor) {
+        vendorsRepository.saveAndFlush(
                 Vendors.builder()
                         .nameVendor(vendor.getName())
                         .build()
         );
+        return vendor;
     }
 
     @Override
-    public Vendors update(Vendor vendor) {
-        getById(vendor.getId());
-        return vendorsRepository.saveAndFlush(
+    public Vendor update(Vendor vendor) {
+        entityById(vendor.getId());
+        vendorsRepository.saveAndFlush(
                 Vendors.builder()
                         .id(vendor.getId())
                         .nameVendor(vendor.getName())
                         .build()
         );
+        return vendor;
     }
 
     @Override
-    public Vendors getById(String id) {
+    public Vendor getById(String id) {
+        Vendors vendor = vendorsRepository.findById(id)
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, ResponseMessages.ERROR_NOT_FOUND)
+                );
+        return Vendor.builder()
+                .id(vendor.getId())
+                .name(vendor.getNameVendor())
+                .build();
+    }
+
+    @Override
+    public Vendors entityById(String id) {
         return vendorsRepository.findById(id)
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND, ResponseMessages.ERROR_NOT_FOUND)
@@ -48,7 +61,11 @@ public class VendorsServiceImpl implements VendorsService {
     }
 
     @Override
-    public List<Vendors> getAll() {
-        return vendorsRepository.findAll();
+    public List<Vendor> getAll() {
+        return vendorsRepository.findAll().stream().map(
+                detail -> Vendor.builder()
+                        .name(detail.getNameVendor())
+                        .build()
+        ).toList();
     }
 }

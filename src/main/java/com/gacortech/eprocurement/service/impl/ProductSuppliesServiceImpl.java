@@ -44,7 +44,7 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
     public ProductSupplies create(ProductSupply productSupply) {
 
         Products productFound = productsService.findByIdOrThrowNotFound(productSupply.getProductId());
-        Vendors vendorFound = vendorsService.getById(productSupply.getVendorId());
+        Vendors vendorFound = vendorsService.entityById(productSupply.getVendorId());
 
         Set<ProductSupplies> collect = getAll().stream()
                 .filter(productSupplies ->
@@ -54,11 +54,9 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
 
                 )
                 .collect(Collectors.toSet());
-
         if(!collect.isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, ResponseMessages.ERROR_ALREADY_EXISTS);
         }
-
         return productSupplyRepository.saveAndFlush(
                 ProductSupplies.builder()
                         .product(productFound)
@@ -75,7 +73,7 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
     public ProductSupplies update(ProductSupply productSupply) {
         getByid(productSupply.getId());
         Products productFound = productsService.findByIdOrThrowNotFound(productSupply.getProductId());
-        Vendors vendorFound = vendorsService.getById(productSupply.getVendorId());
+        Vendors vendorFound = vendorsService.entityById(productSupply.getVendorId());
         return productSupplyRepository.saveAndFlush(
                 ProductSupplies.builder()
                         .product(productFound)

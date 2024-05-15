@@ -8,9 +8,10 @@ import java.util.List;
 
 public interface VendorsService {
 
-    Vendors create(Vendor vendor);
-    Vendors update(Vendor vendor);
-    Vendors getById(String id);
-    List<Vendors> getAll();
+    Vendor create(Vendor vendor);
+    Vendor update(Vendor vendor);
+    Vendor getById(String id);
+    Vendors entityById(String id);
+    List<Vendor> getAll();
 
 }
