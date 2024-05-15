@@ -5,14 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Builder
-public class ProductSupplyResponse {
-    Integer id;
-    String  productName;
-    String  vendorName;
-    Integer stock;
-    Integer price;
+public class ProductResponse {
+    private String id;
+    private String productName;
+    private Integer categoryId;
+
 }

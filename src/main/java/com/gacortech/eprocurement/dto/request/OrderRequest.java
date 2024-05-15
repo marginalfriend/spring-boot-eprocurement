@@ -13,15 +13,6 @@ import java.util.List;
 @Builder
 public class OrderRequest {
     private List<OrderDetailRequest> orderDetails;
-    private String productSupplyIds;
-
-    public String getProductSupplyIds() {
-        return productSupplyIds;
-    }
-
-    public void setProductSupplyIds(String productSupplyIds) {
-        this.productSupplyIds = productSupplyIds;
-    }
 }
 
 //  [

@@ -13,5 +13,5 @@ import lombok.NoArgsConstructor;
 public class Product {
     private String id;
     private String name;
-    private Categories categoryId;
+    private Integer categoryId;
 }
