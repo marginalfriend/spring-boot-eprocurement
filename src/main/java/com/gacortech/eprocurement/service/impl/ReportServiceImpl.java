@@ -2,6 +2,7 @@ package com.gacortech.eprocurement.service.impl;
 
 import com.gacortech.eprocurement.constant.ResponseMessages;
 import com.gacortech.eprocurement.dto.request.ReportRequest;
+import com.gacortech.eprocurement.dto.request.SearchOrderRequest;
 import com.gacortech.eprocurement.dto.response.OrdersResponse;
 import com.gacortech.eprocurement.dto.response.ReportResponse;
 import com.gacortech.eprocurement.entity.ProductSupplies;
@@ -18,9 +19,20 @@ public class ReportServiceImpl implements ReportService {
     ProductSuppliesService  suppliesService;
     @Override
     public List<ReportResponse> getAll(ReportRequest request) {
+        SearchOrderRequest searchOrderRequest;
+
         if (request.getDate() != null && request.getMonth() != null) {
             throw new RuntimeException(ResponseMessages.ERROR_DATE_AND_MONTH);
+        } else if (request.getDate() != null) {
+        searchOrderRequest = SearchOrderRequest.builder()
+                .Date(request.getDate())
+                .build();
+        } else {
+            searchOrderRequest = SearchOrderRequest.builder()
+                    .
+                    .build();
         }
+
 
         List<OrdersResponse> orders = ordersService.getAllOrders();// Insert condition soon
 

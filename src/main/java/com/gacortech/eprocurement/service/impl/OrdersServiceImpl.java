@@ -56,7 +56,6 @@ public class OrdersServiceImpl implements OrdersService {
         ordersRepository.saveAndFlush(order);
         log.info("Check order details: {}", order.getOrderDate());
 
-
         List<OrderDetails> orderDetails = request.getOrderDetails().stream()
                 .map(detail -> {
                     log.info("Quantity dari detail request: {}", detail.getQuantity());
