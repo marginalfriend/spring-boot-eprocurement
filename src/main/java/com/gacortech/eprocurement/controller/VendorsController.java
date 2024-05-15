@@ -6,6 +6,7 @@ import com.gacortech.eprocurement.dto.entity_rep.Vendor;
 import com.gacortech.eprocurement.dto.response.ProductSupplyResponse;
 import com.gacortech.eprocurement.service.impl.ProductSuppliesServiceImpl;
 import com.gacortech.eprocurement.service.impl.VendorsServiceImpl;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,9 +47,21 @@ public class VendorsController {
     }
 
     @PutMapping
+    public Vendor updateVendor(@RequestBody Vendor v){
+        return vendorsService.update(v);
+    }
 
     @PostMapping
+    public Vendor createVendor(@RequestBody Vendor v){
+        return vendorsService.create(v);
+    }
 
+    @PostMapping(path = "/product-supplies")
+    public ProductSupplyResponse addProduct(
+            @RequestBody ProductSupply productSupply
+    ){
+        return prodSuppSer.create(productSupply);
+    }
 
 
 }
