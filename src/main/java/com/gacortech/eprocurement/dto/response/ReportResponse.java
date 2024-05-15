@@ -1,16 +1,17 @@
 package com.gacortech.eprocurement.dto.response;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@Builder
 public class ReportResponse {
-    private Long id;
+    private String id;
     private String productName;
     private String vendorName;
     private String purchaseDate;
     private Integer quantity;
-    private Double totalPrice;
-
+    private Integer totalPrice;
+    private PagingResponse pagingResponse;
 }

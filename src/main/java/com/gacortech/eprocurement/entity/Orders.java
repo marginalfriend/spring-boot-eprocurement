@@ -1,20 +1,20 @@
 package com.gacortech.eprocurement.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gacortech.eprocurement.constant.Tables;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import java.lang.constant.Constable;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = Tables.ORDERS)
 public class Orders {
@@ -23,10 +23,11 @@ public class Orders {
     private String id;
 
     @Column(name = "order_date", nullable = false)
-    @Temporal(TemporalType.DATE)
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate orderDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Timestamp orderDate;
 
+    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
+    private List<OrderDetails> orderDetails;
 
 }
 

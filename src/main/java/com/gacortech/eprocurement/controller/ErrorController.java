@@ -1,6 +1,8 @@
 package com.gacortech.eprocurement.controller;
+import com.gacortech.eprocurement.constant.ResponseMessages;
 import com.gacortech.eprocurement.dto.response.CommonResponse;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,12 +24,33 @@ public class ErrorController {
                 .body(response);
     }
 
-    // tambah error handler untuk validasi
     @ExceptionHandler({ConstraintViolationException.class})
     public ResponseEntity<CommonResponse<?>> constraintViolationExceptionHandler (ConstraintViolationException e) {
         CommonResponse<?> response = CommonResponse.builder()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .message(e.getMessage())
+                .build();
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(response);
+    }
+
+    @ExceptionHandler({DataIntegrityViolationException.class})
+    public ResponseEntity<CommonResponse<?>> runtimeExceptionHandler (DataIntegrityViolationException e) {
+        CommonResponse<?> response = CommonResponse.builder()
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .message(ResponseMessages.ERROR_ALREADY_EXISTS)
+                .build();
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(response);
+    }
+
+    @ExceptionHandler({NullPointerException.class})
+    public ResponseEntity<CommonResponse<?>> runtimeExceptionHandler (NullPointerException e) {
+        CommonResponse<?> response = CommonResponse.builder()
+                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .message(ResponseMessages.ERROR_INTERNAL_SERVER)
                 .build();
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)

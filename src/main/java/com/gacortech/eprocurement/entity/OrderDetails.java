@@ -1,17 +1,18 @@
 package com.gacortech.eprocurement.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.gacortech.eprocurement.constant.Tables;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.nio.CharBuffer;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = Tables.ORDER_DETAILS)
 public class OrderDetails {
@@ -22,13 +23,19 @@ public class OrderDetails {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
+    @JsonBackReference
     private Orders orders;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Products product;
+    @JoinColumn(name = "productSupply_id")
+    @JsonBackReference
+    private ProductSupplies productSupplies;
 
+    @Column(name = "price", nullable = false)
+    private Integer price;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
+
+
 }

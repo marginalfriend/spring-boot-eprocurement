@@ -1,6 +1,5 @@
-package com.gacortech.eprocurement.dto.entity_rep;
+package com.gacortech.eprocurement.dto.request;
 
-import com.gacortech.eprocurement.entity.Categories;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -12,10 +11,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
-public class Product {
-    private String id;
-    @NotBlank(message = "name is required")
+public class SearchProductRequest {
+ //   @NotBlank(message = "name is required")
     private String name;
+
     @NotNull(message = "category is required")
     private Integer categoryId;
+
+    private Integer page;
+    private Integer size;
+
+    private String sortBy;
+    private String direction;
 }

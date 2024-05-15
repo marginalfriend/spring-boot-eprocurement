@@ -1,11 +1,14 @@
 package com.gacortech.eprocurement.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.gacortech.eprocurement.constant.Tables;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -15,9 +18,14 @@ import lombok.NoArgsConstructor;
 @Table(name = Tables.CATEGORIES)
 public class Categories {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_sequence")
+    @SequenceGenerator(name = "category_sequence", sequenceName = "category_sequence_name", allocationSize = 0)
     private Integer id;
 
-    @Column(name = "category_name")
+    @Column(name = "category_name", unique = true)
     private String name;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Products> products;
 }
