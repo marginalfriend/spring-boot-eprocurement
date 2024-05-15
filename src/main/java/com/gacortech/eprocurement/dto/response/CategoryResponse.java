@@ -10,5 +10,5 @@ import java.util.List;
 public class CategoryResponse {
     private Integer id;
     private String categoryName;
-    private List<ProductResponse> products;
+//    private List<ProductResponse> products;
 }

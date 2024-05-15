@@ -12,5 +12,4 @@ public interface OrdersService {
     OrdersResponse create(OrderRequest request);
     Page<Orders> getAllOrders(SearchOrderRequest request);
     OrdersResponse getById(String id);
-    List<Orders> getAllOrders(String orderDate, String customerName, String status, Double totalAmount);
 }

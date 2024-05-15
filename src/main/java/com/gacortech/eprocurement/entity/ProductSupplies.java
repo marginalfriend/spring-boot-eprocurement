@@ -1,5 +1,6 @@
 package com.gacortech.eprocurement.entity;
 
+import com.gacortech.eprocurement.dto.response.OrdersResponse;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,4 +31,5 @@ public class ProductSupplies {
 
     @Column(name = "price")
     private Integer price;
+
 }
