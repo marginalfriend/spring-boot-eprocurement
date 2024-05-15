@@ -14,8 +14,8 @@ import java.util.List;
 
 @Service
 public class ReportServiceImpl implements ReportService {
-    OrdersService   ordersService;
-    ProductSuppliesService suppliesService;
+    OrdersService           ordersService;
+    ProductSuppliesService  suppliesService;
     @Override
     public List<ReportResponse> getAll(ReportRequest request) {
         if (request.getDate() != null && request.getMonth() != null) {
