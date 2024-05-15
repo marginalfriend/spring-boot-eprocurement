@@ -26,11 +26,9 @@ public class CategoriesServiceImpl implements CategoriesService {
         Categories newCategory = Categories.builder()
                 .name(request.getName())
                 .build();
+
         categoriesRepository.saveAndFlush(newCategory);
 
-        if(!newCategory.getName().isEmpty()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ResponseMessages.ERROR_ALREADY_EXISTS);
-        }
         return CategoryResponse.builder()
                 .id(newCategory.getId())
                 .categoryName(newCategory.getName())

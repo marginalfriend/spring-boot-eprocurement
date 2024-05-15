@@ -22,7 +22,7 @@ public class Categories {
     @SequenceGenerator(name = "category_sequence", sequenceName = "category_sequence_name", allocationSize = 0)
     private Integer id;
 
-    @Column(name = "category_name")
+    @Column(name = "category_name", unique = true)
     private String name;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
