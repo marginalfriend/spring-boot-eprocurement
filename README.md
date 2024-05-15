@@ -1,22 +1,72 @@
-# Features
-## Category Management
-- Create Category
-- Read Category
-- Update Category
- 
-## Product Management
-- Create Product
-- Read Product
-- Update Product
+# Gacor eProcurement API Docs
+```json
+Root URL : gacortech.com/api/v0
+```
+## Categories Management
+```[GET] /categories```
+Request Param :
+- name : To search categories by name (case ignored)
 
-## Vendor Management
-- Create Vendor
-- Read Vendor
-- Update Vendor
+Response :
+```json
+{
+  "statusCode": 200,
+  "message": "Data found",
+  "data": [
+    {
+      "id": 1,
+      "name": "Tea Leaf"
+    },
+    {
+      "id": 2,
+      "name": "Category"
+    }
+  ],
+  "paging": null
+}
+```
 
-## Order
-- Create Order
-- Read Order
+```[POST] /categories```
 
-## Daily and Monthly Report
-- Read Report
+Request :
+```json
+{
+  "name" : "Category Name"
+}
+```
+
+Response :
+```json
+{
+    "statusCode": 201,
+    "message": "Data created successfully",
+    "data": {
+        "id": 3,
+        "name": "Category Name"
+    },
+    "paging": null
+}
+```
+
+```[PUT] /categories```
+
+Request :
+```json
+{
+  "id" : 1,
+  "name" : "New Name"
+}
+```
+
+Response :
+```json
+{
+    "statusCode": 200,
+    "message": "Data updated successfully",
+    "data": {
+        "id": 3,
+        "name": "New Name"
+    },
+    "paging": null
+}
+```
