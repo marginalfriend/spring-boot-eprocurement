@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "product_supply")
-public class ProductSupply {
+public class ProductSupplies {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;

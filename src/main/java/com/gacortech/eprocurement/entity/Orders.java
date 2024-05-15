@@ -3,18 +3,16 @@ package com.gacortech.eprocurement.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gacortech.eprocurement.constant.Tables;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import java.lang.constant.Constable;
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = Tables.ORDERS)
 public class Orders {
@@ -27,6 +25,7 @@ public class Orders {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate orderDate;
 
-
+    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderDetails> orderDetails;
 }
 

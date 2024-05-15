@@ -3,6 +3,7 @@ package com.gacortech.eprocurement.service;
 import com.gacortech.eprocurement.entity.OrderDetails;
 
 
+import java.util.Collection;
 import java.util.List;
 
 public interface OrderDetailService {
@@ -13,4 +14,5 @@ public interface OrderDetailService {
 
     List<OrderDetails> getAllOrderDetails();
 
+    Collection<Object> createBulk(List<OrderDetails> orderDetails);
 }
