@@ -54,7 +54,6 @@ public class OrdersServiceImpl implements OrdersService {
         ordersRepository.saveAndFlush(order);
         log.info("Check order details: {}", order.getOrderDate());
 
-
         List<OrderDetails> orderDetails = request.getOrderDetails().stream()
                 .map(detail -> {
                     log.info("Quantity dari detail request: {}", detail.getQuantity());
@@ -80,7 +79,7 @@ public class OrdersServiceImpl implements OrdersService {
                 .map(detail -> {
                     return OrderDetailResponse.builder()
                             .id(detail.getId())
-                            .supplyId(detail.getId())
+                            .supplyId(detail.getProductSupplies().getId())
                             .productName(detail.getProductSupplies().getProduct().getName())
                             .quantity(detail.getQuantity())
                             .price(detail.getProductSupplies().getPrice())
