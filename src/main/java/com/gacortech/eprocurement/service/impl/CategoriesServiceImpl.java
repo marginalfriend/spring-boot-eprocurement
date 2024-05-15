@@ -27,6 +27,10 @@ public class CategoriesServiceImpl implements CategoriesService {
                 .name(request.getName())
                 .build();
         categoriesRepository.saveAndFlush(newCategory);
+
+        if(!newCategory.getName().isEmpty()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ResponseMessages.ERROR_ALREADY_EXISTS);
+        }
         return CategoryResponse.builder()
                 .id(newCategory.getId())
                 .categoryName(newCategory.getName())
@@ -53,6 +57,10 @@ public class CategoriesServiceImpl implements CategoriesService {
     public List<CategoryResponse> getAll(Category request) {
         Specification<Categories> specification = CategorySpecification.getSpecification(request);
         List<Categories> categories = categoriesRepository.findAll(specification);
+
+        if(categories.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ResponseMessages.ERROR_NOT_FOUND);
+        }
         return categories.stream()
                 .map(ctg -> {
                     List<ProductResponse> productResponse = ctg.getProducts().stream()
