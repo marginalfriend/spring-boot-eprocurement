@@ -1,3 +1,5 @@
-package com.gacortech.eprocurement.dto.request;public class SearchProductSupplyRequest {
+package com.gacortech.eprocurement.dto.request;
+
+public class SearchProductSupplyRequest {
 
 }

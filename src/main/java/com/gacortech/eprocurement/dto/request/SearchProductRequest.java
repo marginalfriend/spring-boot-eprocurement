@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class SearchProductRequest {
-    @NotBlank(message = "name is required")
+ //   @NotBlank(message = "name is required")
     private String name;
 
     @NotNull(message = "category is required")

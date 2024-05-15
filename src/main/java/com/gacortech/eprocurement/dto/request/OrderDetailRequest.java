@@ -1,5 +1,7 @@
 package com.gacortech.eprocurement.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,5 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class OrderDetailRequest {
     private Integer productSupplyId;
+
+    @NotBlank(message = "quantity is required")
     private Integer quantity;
 }

@@ -1,6 +1,7 @@
 package com.gacortech.eprocurement.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.gacortech.eprocurement.constant.Tables;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,10 +23,12 @@ public class OrderDetails {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
+    @JsonBackReference
     private Orders orders;
 
     @ManyToOne
     @JoinColumn(name = "productSupply_id")
+    @JsonBackReference
     private ProductSupplies productSupplies;
 
 

@@ -1,5 +1,6 @@
 package com.gacortech.eprocurement.service.impl;
 
+import com.gacortech.eprocurement.dto.entity_rep.OrderDetail;
 import com.gacortech.eprocurement.dto.request.OrderRequest;
 import com.gacortech.eprocurement.dto.request.SearchOrderRequest;
 import com.gacortech.eprocurement.dto.response.OrderDetailResponse;
@@ -70,53 +71,66 @@ public class OrdersServiceImpl implements OrdersService {
                             .quantity(detail.getQuantity())
                             .build();
                 }).toList();
+        orderDetailService.createBulk(orderDetails);
        ordersRepository.saveAndFlush(order);
        log.info("Check order details: {}", order.getOrderDate());
 
 
         List<OrderDetailResponse> savedOrderDetails = orderDetails.stream()
-                .map(detail -> {
-                    return OrderDetailResponse.builder()
-                            .id(detail.getId())
-                            .supplyId(detail.getProductSupplies().getId())
-                            .productName(detail.getProductSupplies().getProduct().getName())
-                            .quantity(detail.getQuantity())
-                            .price(detail.getProductSupplies().getPrice())
-                            .totalAmount(detail.getProductSupplies().getPrice() * detail.getQuantity())
-                            .build();
-                        }).toList();
+                .map(detail -> OrderDetailResponse.builder()
+                        .id(detail.getId())
+                        .supplyId(detail.getProductSupplies().getId())
+                        .productName(detail.getProductSupplies().getProduct().getName())
+                        .quantity(detail.getQuantity())
+                        .price(detail.getProductSupplies().getPrice())
+                        .totalAmount(detail.getProductSupplies().getPrice() * detail.getQuantity())
+                        .build()).toList();
 
         return OrdersResponse.builder()
                 .id(order.getId())
                 .orderDate(order.getOrderDate().toString())
                 .orderDetails(savedOrderDetails)
+                .totalAmount(orderDetails.stream().mapToInt(od -> od.getProductSupplies().getPrice()).sum())
                 .build();
     }
 
     @Override
     public Page<Orders> getAllOrders(SearchOrderRequest request) {
+        String validSortBy;
+        String validDirection;
 
-
-        if (request.getPage() <= 0) {
-            request.setPage(1);
-
+        int page;
+        if (request.getPage() == null) {
+            page = 1;
+        } else if (request.getPage() < 1) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Page number cannot be less than 1");
+        } else {
+            page = request.getPage();
         }
 
-        String validSortBy;
         if ("Date".equalsIgnoreCase(request.getSortBy()) || "Amount".equalsIgnoreCase(request.getSortBy())) {
             validSortBy = request.getSortBy();
+            if (request.getDirection() == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Direction is required");
+            } else if (!request.getDirection().equals("asc") && !request.getDirection().equals("desc")) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Direction must be asc or desc");
+            } else {
+                validDirection = request.getDirection();
+            }
         } else {
-            validSortBy = "Date";
+            validDirection = "asc";
+            validSortBy = "orderDate";
         }
+
         int size = 50;
         if (request.getSize()!= null){
             size = request.getSize();
 
         }
 
-        Sort sort = Sort.by(Sort.Direction.fromString(request.getDirection()), validSortBy);
+        Sort sort = Sort.by(Sort.Direction.fromString(validDirection), validSortBy);
 
-        Pageable pageable = PageRequest.of((request.getPage() - 1), size, sort);
+        Pageable pageable = PageRequest.of((page - 1), size, sort);
 
 
         Specification<Orders> specification = OrderSpecification.getSpecification(request);
@@ -125,17 +139,28 @@ public class OrdersServiceImpl implements OrdersService {
 
             @Override
             public OrdersResponse getById(String id) {
-                Optional<Orders> optionalOrders = ordersRepository.findById(id);
-                if(optionalOrders.isEmpty()){
-                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product Not Found");
-                }
-                Orders orders = optionalOrders.get();
+                Orders orders = ordersRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product Not Found"));
+
+
+                List<OrderDetailResponse> orderDetailResponses = orders.getOrderDetails().stream().map(details -> OrderDetailResponse.builder()
+                        .id(details.getId())
+                        .quantity(details.getQuantity())
+                        .productName(details.getProductSupplies().getProduct().getName())
+                        .price(details.getProductSupplies().getPrice())
+                        .supplyId(details.getProductSupplies().getId())
+                        .totalAmount(details.getProductSupplies().getPrice() * details.getQuantity())
+                        .build())
+                        .toList();
+
                 Integer totalAmount = orders.getOrderDetails().stream().mapToInt(details -> details.getProductSupplies().getPrice()).sum();
                 return OrdersResponse.builder()
-                    .id(id)
-                    .orderDate(String.valueOf(orders.getOrderDate()))
-                    .totalAmount(totalAmount)
-                    .build();
+                        .id(id)
+                        .orderDate(String.valueOf(orders.getOrderDate()))
+                        .totalAmount(totalAmount)
+                        .orderDetails(orderDetailResponses)
+                        .build();
+            }
+
             }
 
 
@@ -162,6 +187,6 @@ public class OrdersServiceImpl implements OrdersService {
 //
 //        }).toList();
 
-    }
+
 
 

@@ -11,6 +11,7 @@ import com.gacortech.eprocurement.dto.response.OrdersResponse;
 import com.gacortech.eprocurement.dto.response.PagingResponse;
 import com.gacortech.eprocurement.entity.Orders;
 import com.gacortech.eprocurement.service.OrdersService;
+import com.gacortech.eprocurement.utils.ValidationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -24,10 +25,12 @@ import java.util.List;
 @RequestMapping(path = Routes.ORDERS)
 public class OrdersController {
     private final OrdersService ordersService;
+    private final ValidationUtil validationUtil;
 
   @PostMapping
     public ResponseEntity<CommonResponse<OrdersResponse>> createNewOrder(@RequestBody OrderRequest request)
   {
+      validationUtil.validate(request);
       OrdersResponse orderResponse = ordersService.create(request);
       CommonResponse<OrdersResponse> response = CommonResponse.<OrdersResponse>builder()
               .statusCode(HttpStatus.CREATED.value())
@@ -37,7 +40,7 @@ public class OrdersController {
       return ResponseEntity .status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping(path = Routes.PATH_VAR_ID)
+    @GetMapping(path = "/{id}")
     public ResponseEntity<CommonResponse<OrdersResponse>> getOrderById(@PathVariable String id) {
         OrdersResponse orderResponse = ordersService.getById(id);
         CommonResponse<OrdersResponse> response = CommonResponse.<OrdersResponse>builder()
