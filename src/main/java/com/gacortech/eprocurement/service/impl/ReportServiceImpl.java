@@ -28,6 +28,16 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public CommonResponse<List<ReportResponse>> getAll(ReportRequest request) {
         SearchOrderRequest searchOrderRequest;
+        Integer size = 50;
+        Integer page = 1;
+
+        if (request.getPage() != null) {
+            page = request.getPage();
+        }
+
+        if (request.getSize() != null) {
+            size = request.getSize();
+        }
 
         if (request.getDate() != null && request.getMonth() != null) {
             throw new RuntimeException(ResponseMessages.ERROR_DATE_AND_MONTH);
@@ -35,13 +45,15 @@ public class ReportServiceImpl implements ReportService {
         } else if (request.getDate() != null) {
         searchOrderRequest = SearchOrderRequest.builder()
                 .date(request.getDate())
-                .size(Integer.MAX_VALUE)
+                .size(size)
+                .page(page)
                 .build();
 
         } else {
         searchOrderRequest = SearchOrderRequest.builder()
                 .month(request.getMonth())
-                .size(Integer.MAX_VALUE)
+                .size(size)
+                .page(page)
                 .build();
         }
 
