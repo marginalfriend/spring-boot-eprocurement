@@ -19,34 +19,18 @@ public class OrderSpecification {
         return (root, query, criteriaBuilder) -> {
 
             List<Predicate> predicates = new ArrayList<>();
-            if (searchOrderRequest.getMinAmount()!= null){
-                Predicate minPredicate = criteriaBuilder.equal(root.get("minAmount"), searchOrderRequest.getMinAmount());
-                predicates.add(minPredicate);
-            }
+        if (searchOrderRequest.getDate() != null){
+            Predicate datePredicate = criteriaBuilder.equal(root.get("date"),searchOrderRequest.getDate());
+            predicates.add(datePredicate);
+    }
 
-            if (searchOrderRequest.getMaxAmount() != null) {
-                Predicate maxPredicate = criteriaBuilder.equal(root.get("maxAmount"), searchOrderRequest.getMaxAmount());
-                predicates.add(maxPredicate);
+        if (searchOrderRequest.getMonth() != null){
+            Predicate monthPredicate = criteriaBuilder.equal(root.get("month"),searchOrderRequest.getMonth());
+            predicates.add(monthPredicate);
 
-            }
-
-            if(searchOrderRequest.getStartFrom()!= null) {
-                Predicate startFrom = criteriaBuilder.greaterThanOrEqualTo(root.get("StartFrom"), searchOrderRequest.getStartFrom());
-                predicates.add(startFrom);
-            }
-            if (searchOrderRequest.getEndTo() != null){
-                Predicate endTo = criteriaBuilder.lessThanOrEqualTo(root.get("EndFrom"),searchOrderRequest.getEndTo());
-                predicates.add(endTo);
-            }
-            if (searchOrderRequest.getDate() != null){
-                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                LocalDate parseDate = LocalDate.parse(searchOrderRequest.getDate(), dateTimeFormatter);
-                Predicate datePredicate = criteriaBuilder.equal(root.get("Date"),parseDate);
-                predicates.add(datePredicate);
-
-            }
-    return query.where(predicates.toArray(new Predicate[]{})).getRestriction();
-        };
+        }
+        return query.where(predicates.toArray(new Predicate[]{})).getRestriction();
+    };
 
     }
 }

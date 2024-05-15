@@ -10,11 +10,8 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class SearchOrderRequest {
-    private Integer maxAmount;
-    private Integer minAmount;
-    private String startFrom;
-    private String endTo;
-    private String Date;
+    private String date;
+    private String month;
 
     private String sortBy;
     private String direction;
