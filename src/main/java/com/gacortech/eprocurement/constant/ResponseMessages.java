@@ -11,5 +11,6 @@ public class ResponseMessages {
     public static final String ERROR_ALREADY_EXISTS     = "Data already exists";
     public static final String ERROR_INSUFFICIENT_STOCK = "Insufficient stock";
     public static final String ERROR_DATE_AND_MONTH     = "Choose only one between date or month";
+    public static final String ERROR_EMPTY_NAME              = "Name is required";
 }
 
