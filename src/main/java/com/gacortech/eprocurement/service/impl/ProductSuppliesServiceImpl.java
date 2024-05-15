@@ -28,8 +28,78 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
     private final ProductsServiceImpl productsService;
     private final VendorsServiceImpl vendorsService;
     @Override
-    public List<ProductSupplyResponse> getAll() {
-        return productSupplyRepository.findAll().stream().map(
+    public List<ProductSupplyResponse> getAll(ProductSupply productSupply) {
+
+        if(     productSupply.getId() == null &&
+                productSupply.getProductId() == null &&
+                productSupply.getVendorId() == null &&
+                productSupply.getPrice() == null &&
+                productSupply.getStock() == null
+        ){
+            return productSupplyRepository.findAll().stream().map(
+                    detail -> ProductSupplyResponse.builder()
+                            .id(detail.getId())
+                            .productName(detail.getProduct().getName())
+                            .vendorName(detail.getVendor().getNameVendor())
+                            .price(detail.getPrice())
+                            .stock(detail.getPrice())
+                            .build()
+            ).toList();
+        }
+
+        //filter Specification
+        Specification<ProductSupplies> predicates = ProductSupplySpecification.getVendorAndProductEqual(productSupply);
+        List<ProductSupplies> temp1 = productSupplyRepository.findAll(predicates);
+
+
+        //filter Vendor
+        if(productSupply.getVendorId() != null && productSupply.getProductId() != null){
+
+            Vendors vendor = vendorsService.entityById(productSupply.getVendorId());
+            Products product = productsService.entityId(productSupply.getProductId());
+
+            return temp1.stream().filter(
+                    detailFil -> detailFil.getVendor().equals(vendor)
+                            &&
+                            detailFil.getProduct().equals(product)
+            ).map(
+                    detail -> ProductSupplyResponse.builder()
+                            .id(detail.getId())
+                            .productName(detail.getProduct().getName())
+                            .vendorName(detail.getVendor().getNameVendor())
+                            .price(detail.getPrice())
+                            .stock(detail.getPrice())
+                            .build()
+            ).collect(Collectors.toList());
+        }else if (productSupply.getVendorId() != null) {
+            Vendors vendor = vendorsService.entityById(productSupply.getVendorId());
+            return temp1.stream().filter(
+                    detailFil -> detailFil.getVendor().equals(vendor)
+            ).map(
+                    detail -> ProductSupplyResponse.builder()
+                            .id(detail.getId())
+                            .productName(detail.getProduct().getName())
+                            .vendorName(detail.getVendor().getNameVendor())
+                            .price(detail.getPrice())
+                            .stock(detail.getPrice())
+                            .build()
+            ).collect(Collectors.toList());
+        }else if (productSupply.getProductId() != null){
+            Products product = productsService.entityId(productSupply.getProductId());
+            return temp1.stream().filter(
+                    detailFil -> detailFil.getProduct().equals(product)
+            ).map(
+                    detail -> ProductSupplyResponse.builder()
+                            .id(detail.getId())
+                            .productName(detail.getProduct().getName())
+                            .vendorName(detail.getVendor().getNameVendor())
+                            .price(detail.getPrice())
+                            .stock(detail.getPrice())
+                            .build()
+            ).collect(Collectors.toList());
+        }
+
+        return temp1.stream().map(
                 detail -> ProductSupplyResponse.builder()
                         .id(detail.getId())
                         .productName(detail.getProduct().getName())
@@ -37,7 +107,9 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
                         .price(detail.getPrice())
                         .stock(detail.getPrice())
                         .build()
-        ).toList();
+        ).collect(Collectors.toList());
+
+
     }
 
     @Override

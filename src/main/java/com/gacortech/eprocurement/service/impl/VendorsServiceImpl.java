@@ -61,7 +61,7 @@ public class VendorsServiceImpl implements VendorsService {
     }
 
     @Override
-    public List<Vendor> getAll() {
+    public List<Vendor> getAll(String name) {
         return vendorsRepository.findAll().stream().map(
                 detail -> Vendor.builder()
                         .name(detail.getNameVendor())
