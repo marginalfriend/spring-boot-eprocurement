@@ -32,6 +32,10 @@ public class ProductsServiceImpl implements ProductsService {
                 .category(categoriesService.entityById(request.getCategoryId()))
                 .build();
         productsRepository.saveAndFlush(newProduct);
+
+        if(!newProduct.getName().isEmpty()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ResponseMessages.ERROR_ALREADY_EXISTS);
+        }
         return ProductResponse.builder()
                 .id(newProduct.getId())
                 .productName(newProduct.getName())
@@ -71,7 +75,12 @@ public class ProductsServiceImpl implements ProductsService {
         Sort sort = Sort.by(Sort.Direction.fromString(request.getDirection()), validSortBy);
         Pageable pageable = PageRequest.of((request.getPage()-1), request.getSize(), sort);
         Specification<Products> specification = ProductSpecification.getSpecification(request);
-        return productsRepository.findAll(specification, pageable);
+
+        Page<Products> productsFound = productsRepository.findAll(specification, pageable);
+        if(productsFound.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ResponseMessages.ERROR_NOT_FOUND);
+        }
+        return productsFound;
     }
 
     @Override
