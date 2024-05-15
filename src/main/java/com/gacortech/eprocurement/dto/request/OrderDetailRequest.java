@@ -14,6 +14,9 @@ import lombok.NoArgsConstructor;
 public class OrderDetailRequest {
     private Integer productSupplyId;
 
-    @NotBlank(message = "quantity is required")
+    @NotBlank(message = "Quantity is required")
     private Integer quantity;
+
+    @NotBlank(message = "Price is required")
+    private Integer price;
 }

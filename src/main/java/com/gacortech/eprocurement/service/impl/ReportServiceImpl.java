@@ -75,7 +75,7 @@ public class ReportServiceImpl implements ReportService {
                                 .vendorName(vendor.getNameVendor())
                                 .purchaseDate(order.getOrderDate().toString())
                                 .quantity(detail.getQuantity())
-                                .totalPrice(detail.getProductSupplies().getPrice() * detail.getQuantity())
+                                .totalPrice(detail.getPrice() * detail.getQuantity())
                                 .build()
                 );
             });
