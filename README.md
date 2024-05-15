@@ -1,4 +1,6 @@
 # Gacor eProcurement API Docs
+[Product Management Link](https://www.figma.com/board/Y0J2v3GLyJMZZD3nCFWswn/Live-Code-eProcurement?node-id=0%3A1&t=aMdt6qmLDDbBYERj-1)
+
 ```Root URL : gacortech.com/api/v0```
 
 ## Categories Management
@@ -176,5 +178,119 @@ Response :
         }
     ],
     "paging": null
+}
+```
+
+## Order Management
+```[GET] /order```
+
+Response :
+```json
+{
+    "statusCode": 200,
+    "message": "Data found",
+    "data": [
+        {
+            "id": "be0a12ec-8b70-499a-8b86-62269b7ef601",
+            "orderDate": "2024-05-16T05:09:02.543+07:00",
+            "orderDetails": [
+                {
+                    "id": "2fc0c219-25b7-466d-a88f-7d9c8b596c60",
+                    "price": 50000,
+                    "quantity": 100
+                }
+            ]
+        }
+    ],
+    "paging": {
+        "totalPages": 1,
+        "totalElements": 1,
+        "page": 1,
+        "size": 50,
+        "hasNext": false,
+        "hasPrevious": false
+    }
+}
+```
+
+```[POST] /order```
+Request :
+```json
+{
+    "orderDetails" : [
+        {
+            "productId" : "59b16904-a0cf-48ad-b0d9-61989cd643ac",
+            "vendorId"  : "a067403c-f25a-449a-946d-9fae724548bc",
+
+            "quantity"  : 100,
+            "price"     : 50000
+        }
+    ]
+}
+```
+Or :
+```json
+{
+    "orderDetails" : [
+        {
+            "supplyId"  : 52,
+            "quantity"  : 100,
+            "price"     : 50000
+        }
+    ]
+}
+```
+Response :
+```json
+{
+    "statusCode": 201,
+    "message": "Data created successfully",
+    "data": {
+        "id": "be0a12ec-8b70-499a-8b86-62269b7ef601",
+        "orderDate": "2024-05-16 05:09:02.543",
+        "totalAmount": 50000,
+        "orderDetails": [
+            {
+                "id": "2fc0c219-25b7-466d-a88f-7d9c8b596c60",
+                "supplyId": 52,
+                "productName": "Ethiopia Bombe Flower Bomb",
+                "quantity": 100,
+                "price": 50000,
+                "totalAmount": 5000000
+            }
+        ]
+    },
+    "paging": null
+}
+```
+
+## Report
+```[GET] /report```
+
+Response :
+
+```json
+{
+    "statusCode": 200,
+    "message": "Data found",
+    "data": [
+        {
+            "id": "2fc0c219-25b7-466d-a88f-7d9c8b596c60",
+            "productName": "Ethiopia Bombe Flower Bomb",
+            "vendorName": "PT Suka Cuan",
+            "purchaseDate": "2024-05-16 05:09:02.543",
+            "quantity": 100,
+            "totalPrice": 5000000,
+            "pagingResponse": null
+        }
+    ],
+    "paging": {
+        "totalPages": 1,
+        "totalElements": 1,
+        "page": 0,
+        "size": 50,
+        "hasNext": false,
+        "hasPrevious": false
+    }
 }
 ```
