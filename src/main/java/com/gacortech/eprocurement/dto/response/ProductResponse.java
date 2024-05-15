@@ -1,17 +1,17 @@
-package com.gacortech.eprocurement.dto.entity_rep;
+package com.gacortech.eprocurement.dto.response;
 
-import com.gacortech.eprocurement.entity.Categories;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Builder
-public class Product {
+public class ProductResponse {
     private String id;
-    private String name;
+    private String productName;
     private Integer categoryId;
+
 }
