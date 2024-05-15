@@ -2,9 +2,7 @@ package com.gacortech.eprocurement.service.impl;
 
 import com.gacortech.eprocurement.constant.ResponseMessages;
 import com.gacortech.eprocurement.dto.entity_rep.Product;
-import com.gacortech.eprocurement.dto.response.CategoryResponse;
 import com.gacortech.eprocurement.dto.response.ProductResponse;
-import com.gacortech.eprocurement.entity.Categories;
 import com.gacortech.eprocurement.entity.Products;
 import com.gacortech.eprocurement.repository.ProductsRepository;
 import com.gacortech.eprocurement.service.CategoriesService;
@@ -26,22 +24,31 @@ public class ProductsServiceImpl implements ProductsService {
     public ProductResponse create(Product request) {
         Products newProduct = Products.builder()
                 .name(request.getName())
-                .categoryId(categoriesService.getById(request.getCategoryId()))
+                .categoryId(categoriesService.entityById(request.getCategoryId()))
                 .build();
-        Products savedProduct = productsRepository.saveAndFlush(newProduct);
+        productsRepository.saveAndFlush(newProduct);
         return ProductResponse.builder()
-                .productName(savedProduct.getName())
-                .categoryId(savedProduct.getCategoryId().getId())
+                .id(newProduct.getId())
+                .productName(newProduct.getName())
+                .categoryId(newProduct.getCategoryId().getId())
                 .build();
     }
 
     @Override
     public ProductResponse getById(String id) {
-        Products productFound = findByIdOrThrowNotFound(id);
+        Products productFound = productsRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ResponseMessages.ERROR_NOT_FOUND));
         return ProductResponse.builder()
+                .id(productFound.getId())
                 .productName(productFound.getName())
                 .categoryId(productFound.getCategoryId().getId())
                 .build();
+    }
+
+    @Override
+    public Products entityId(String id) {
+        return productsRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ResponseMessages.ERROR_NOT_FOUND));
     }
 
     @Override
@@ -49,6 +56,7 @@ public class ProductsServiceImpl implements ProductsService {
         List<Products> products = productsRepository.findAll();
         return products.stream()
                 .map(prd -> ProductResponse.builder()
+                        .id(prd.getId())
                         .productName(prd.getName())
                         .categoryId(prd.getCategoryId().getId())
                         .build()).toList();
@@ -56,17 +64,13 @@ public class ProductsServiceImpl implements ProductsService {
 
     @Override
     public ProductResponse update(Product request) {
-        Products product = findByIdOrThrowNotFound(request.getId());
-        Products updatedProduct = productsRepository.saveAndFlush(product);
+        Products updateProduct = entityId(request.getId());
+        productsRepository.saveAndFlush(updateProduct);
         return ProductResponse.builder()
-                .id(updatedProduct.getId())
-                .productName(updatedProduct.getName())
-                .categoryId(updatedProduct.getCategoryId().getId())
+                .id(updateProduct.getId())
+                .productName(updateProduct.getName())
+                .categoryId(updateProduct.getCategoryId().getId())
                 .build();
     }
 
-    public Products findByIdOrThrowNotFound(String id){
-        return productsRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ResponseMessages.ERROR_NOT_FOUND));
-    }
 }

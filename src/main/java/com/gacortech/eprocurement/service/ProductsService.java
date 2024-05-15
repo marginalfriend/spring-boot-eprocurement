@@ -9,6 +9,7 @@ import java.util.List;
 public interface ProductsService {
     ProductResponse create(Product request);
     ProductResponse getById(String id);
+    Products entityId(String id);
     List<ProductResponse> getAll();
     ProductResponse update(Product request);
 }

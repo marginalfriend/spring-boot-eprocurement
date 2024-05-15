@@ -17,7 +17,8 @@ import java.util.List;
 @Table(name = Tables.CATEGORIES)
 public class Categories {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_sequence")
+    @SequenceGenerator(name = "category_sequence", sequenceName = "category_sequence_name", allocationSize = 0)
     private Integer id;
 
     @Column(name = "category_name")

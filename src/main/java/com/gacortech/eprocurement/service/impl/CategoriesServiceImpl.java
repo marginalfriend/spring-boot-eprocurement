@@ -25,13 +25,25 @@ public class CategoriesServiceImpl implements CategoriesService {
                 .build();
         categoriesRepository.saveAndFlush(newCategory);
         return CategoryResponse.builder()
+                .id(newCategory.getId())
                 .categoryName(newCategory.getName())
                 .build();
     }
 
     @Override
-    public Categories getById(Integer id) {
-        return  findByIdOrThrowNotFound(id);
+    public CategoryResponse getById(Integer id) {
+        Categories categoryFound = categoriesRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ResponseMessages.ERROR_NOT_FOUND));
+        return CategoryResponse.builder()
+                .id(categoryFound.getId())
+                .categoryName(categoryFound.getName())
+                .build();
+    }
+
+    @Override
+    public Categories entityById(Integer id) {
+        return categoriesRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ResponseMessages.ERROR_NOT_FOUND));
     }
 
     @Override
@@ -39,13 +51,14 @@ public class CategoriesServiceImpl implements CategoriesService {
         List<Categories> categories = categoriesRepository.findAll();
         return categories.stream()
                 .map(ctg -> CategoryResponse.builder()
+                        .id(ctg.getId())
                         .categoryName(ctg.getName())
                         .build()).toList();
     }
 
     @Override
     public CategoryResponse update(Category category) {
-        Categories updateCategory = findByIdOrThrowNotFound(category.getId());
+        Categories updateCategory = entityById(category.getId());
         categoriesRepository.saveAndFlush(updateCategory);
         return CategoryResponse.builder()
                 .id(category.getId())
@@ -53,8 +66,4 @@ public class CategoriesServiceImpl implements CategoriesService {
                 .build();
     }
 
-    public Categories findByIdOrThrowNotFound(Integer id){
-        return categoriesRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ResponseMessages.ERROR_NOT_FOUND));
-    }
 }
