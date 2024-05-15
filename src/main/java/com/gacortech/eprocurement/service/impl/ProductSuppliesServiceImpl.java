@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -42,7 +43,7 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
                             .productName(detail.getProduct().getName())
                             .vendorName(detail.getVendor().getNameVendor())
                             .price(detail.getPrice())
-                            .stock(detail.getPrice())
+                            .stock(detail.getStock())
                             .build()
             ).toList();
         }
@@ -54,7 +55,7 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
                             .productName(detail.getProduct().getName())
                             .vendorName(detail.getVendor().getNameVendor())
                             .price(detail.getPrice())
-                            .stock(detail.getPrice())
+                            .stock(detail.getStock())
                             .build()
             ).toList();
         }
@@ -67,14 +68,85 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
             productSupply.setStock(0);
         }
 
-        if(productSupply.getProductId() == null && productSupply.getVendorId() == null){
-            productSupplyRepository
-                    .findAllByPriceLessThanAndStockGreaterThanEqual(productSupply.getPrice(), productSupply.getStock());
+        Products products = null;
+        Vendors vendors = null;
+
+
+        if(productSupply.getProductId() != null){
+              products = productsService.entityId(productSupply.getProductId());
         }
 
-        return null;
+        if(productSupply.getVendorId() != null){
+            vendors = vendorsService.entityById(productSupply.getVendorId());
+        }
 
+        List<ProductSupplyResponse> temp;
 
+        if(productSupply.getVendorId() != null && productSupply.getProductId() != null){
+            temp = productSupplyRepository
+                    .findByVendorAndProduct(
+                            vendors,
+                            products
+                    )
+                    .filter(
+                            detail ->
+                                    detail.getStock() >= productSupply.getStock()
+                            &&
+                                    detail.getPrice() <= productSupply.getPrice()
+                    )
+                    .stream()
+                    .map(
+                            detail -> ProductSupplyResponse.builder()
+                                    .id(detail.getId())
+                                    .productName(detail.getProduct().getName())
+                                    .vendorName(detail.getVendor().getNameVendor())
+                                    .price(detail.getPrice())
+                                    .stock(detail.getStock())
+                                    .build()
+                    ).toList();
+        } else if (productSupply.getVendorId() != null || productSupply.getProductId() != null) {
+            temp = productSupplyRepository
+                    .findByVendorOrProduct(
+                            vendors,
+                            products
+                    )
+                    .filter(
+                            detail ->
+                                    detail.getStock() >= productSupply.getStock()
+                                            &&
+                                            detail.getPrice() <= productSupply.getPrice()
+                    )
+                    .stream()
+                    .map(
+                            detail -> ProductSupplyResponse.builder()
+                                    .id(detail.getId())
+                                    .productName(detail.getProduct().getName())
+                                    .vendorName(detail.getVendor().getNameVendor())
+                                    .price(detail.getPrice())
+                                    .stock(detail.getStock())
+                                    .build()
+                    ).toList();
+        }else{
+            temp = productSupplyRepository
+                    .findByPriceLessThan(productSupply.getPrice())
+                    .filter(
+                            detail -> detail.getStock() >= productSupply.getStock()
+                    ).stream().map(
+                            detail -> ProductSupplyResponse.builder()
+                                    .id(detail.getId())
+                                    .productName(detail.getProduct().getName())
+                                    .vendorName(detail.getVendor().getNameVendor())
+                                    .price(detail.getPrice())
+                                    .stock(detail.getStock())
+                                    .build()
+                    ).toList();
+        }
+
+        if(temp.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ResponseMessages.ERROR_NOT_FOUND);
+        }
+
+        return temp;
     }
 
     @Override
