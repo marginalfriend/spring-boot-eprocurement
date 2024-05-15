@@ -104,4 +104,16 @@ public class ProductSuppliesServiceImpl implements ProductSuppliesService {
                 .vendorName(temp.getVendor().getNameVendor())
                 .build();
     }
+
+    @Override
+    public ProductSupplyResponse responseById(Integer i) {
+        ProductSupplies byid = getByid(i);
+        return ProductSupplyResponse.builder()
+                .id(byid.getId())
+                .price(byid.getPrice())
+                .stock(byid.getStock())
+                .productName(byid.getProduct().getName())
+                .vendorName(byid.getVendor().getNameVendor())
+                .build();
+    }
 }

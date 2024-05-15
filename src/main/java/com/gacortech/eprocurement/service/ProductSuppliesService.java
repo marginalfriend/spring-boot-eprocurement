@@ -12,4 +12,5 @@ public interface ProductSuppliesService {
     ProductSupplies getByid(Integer i);
     ProductSupplyResponse create(ProductSupply productSupply);
     ProductSupplyResponse update(ProductSupply productSupply);
+    ProductSupplyResponse responseById(Integer i);
 }
