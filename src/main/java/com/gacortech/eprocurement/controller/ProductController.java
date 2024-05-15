@@ -95,7 +95,6 @@ public class ProductController {
 
     @PutMapping
     public ResponseEntity<CommonResponse<ProductResponse>> updateProduct(@RequestBody Product request){
-        validationUtil.validate(request);
         ProductResponse updateProduct = productsService.update(request);
         CommonResponse<ProductResponse> response = CommonResponse.<ProductResponse>builder()
                 .statusCode(HttpStatus.OK.value())

@@ -4,6 +4,7 @@ import com.gacortech.eprocurement.constant.ResponseMessages;
 import com.gacortech.eprocurement.dto.entity_rep.Product;
 import com.gacortech.eprocurement.dto.request.SearchProductRequest;
 import com.gacortech.eprocurement.dto.response.ProductResponse;
+import com.gacortech.eprocurement.entity.Categories;
 import com.gacortech.eprocurement.entity.Products;
 import com.gacortech.eprocurement.repository.ProductsRepository;
 import com.gacortech.eprocurement.service.CategoriesService;
@@ -31,14 +32,12 @@ public class ProductsServiceImpl implements ProductsService {
                 .name(request.getName())
                 .category(categoriesService.entityById(request.getCategoryId()))
                 .build();
+
         productsRepository.saveAndFlush(newProduct);
 
-        if(!newProduct.getName().isEmpty()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ResponseMessages.ERROR_ALREADY_EXISTS);
-        }
         return ProductResponse.builder()
                 .id(newProduct.getId())
-                .productName(newProduct.getName())
+                .name(newProduct.getName())
                 .categoryId(newProduct.getCategory().getId())
                 .build();
     }
@@ -49,7 +48,7 @@ public class ProductsServiceImpl implements ProductsService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ResponseMessages.ERROR_NOT_FOUND));
         return ProductResponse.builder()
                 .id(productFound.getId())
-                .productName(productFound.getName())
+                .name(productFound.getName())
                 .categoryId(productFound.getCategory().getId())
                 .build();
     }
@@ -86,10 +85,22 @@ public class ProductsServiceImpl implements ProductsService {
     @Override
     public ProductResponse update(Product request) {
         Products updateProduct = entityId(request.getId());
+
+        String newName = request.getName();
+        if (newName  != null) {
+            updateProduct.setName(newName);
+        }
+
+        Integer newCategoryId = request.getCategoryId();
+        if (newCategoryId != null) {
+            Categories newCategory = categoriesService.entityById(newCategoryId);
+            updateProduct.setCategory(newCategory);
+        }
+
         productsRepository.saveAndFlush(updateProduct);
         return ProductResponse.builder()
                 .id(updateProduct.getId())
-                .productName(updateProduct.getName())
+                .name(updateProduct.getName())
                 .categoryId(updateProduct.getCategory().getId())
                 .build();
     }

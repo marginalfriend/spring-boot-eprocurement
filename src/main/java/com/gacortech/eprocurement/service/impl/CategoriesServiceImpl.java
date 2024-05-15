@@ -31,7 +31,7 @@ public class CategoriesServiceImpl implements CategoriesService {
 
         return CategoryResponse.builder()
                 .id(newCategory.getId())
-                .categoryName(newCategory.getName())
+                .name(newCategory.getName())
                 .build();
     }
 
@@ -41,7 +41,7 @@ public class CategoriesServiceImpl implements CategoriesService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ResponseMessages.ERROR_NOT_FOUND));
         return CategoryResponse.builder()
                 .id(categoryFound.getId())
-                .categoryName(categoryFound.getName())
+                .name(categoryFound.getName())
                 .build();
     }
 
@@ -65,13 +65,13 @@ public class CategoriesServiceImpl implements CategoriesService {
                                     .map(prd -> {
                                         return ProductResponse.builder()
                                                 .id(prd.getId())
-                                                .productName(prd.getName())
+                                                .name(prd.getName())
                                                 .categoryId(prd.getCategory().getId())
                                                 .build();
                                     }).toList();
                     return CategoryResponse.builder()
                             .id(ctg.getId())
-                            .categoryName(ctg.getName())
+                            .name(ctg.getName())
                             .build();
                 }).toList();
     }
@@ -82,7 +82,7 @@ public class CategoriesServiceImpl implements CategoriesService {
         categoriesRepository.saveAndFlush(updateCategory);
         return CategoryResponse.builder()
                 .id(category.getId())
-                .categoryName(category.getName())
+                .name(category.getName())
                 .build();
     }
 
