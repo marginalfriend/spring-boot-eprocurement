@@ -1,7 +1,6 @@
 # Gacor eProcurement API Docs
-```json
-Root URL : gacortech.com/api/v0
-```
+```Root URL : gacortech.com/api/v0```
+
 ## Categories Management
 ```[GET] /categories```
 Request Param :

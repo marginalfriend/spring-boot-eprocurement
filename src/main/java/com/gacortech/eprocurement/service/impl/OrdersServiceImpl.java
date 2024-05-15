@@ -1,5 +1,6 @@
 package com.gacortech.eprocurement.service.impl;
 
+import com.gacortech.eprocurement.constant.ResponseMessages;
 import com.gacortech.eprocurement.dto.entity_rep.OrderDetail;
 import com.gacortech.eprocurement.dto.request.OrderRequest;
 import com.gacortech.eprocurement.dto.request.SearchOrderRequest;
@@ -139,8 +140,9 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Override
     public OrdersResponse getById(String id) {
-        Orders orders = ordersRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product Not Found"));
-
+        Orders orders = ordersRepository.findById(id).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, ResponseMessages.ERROR_NOT_FOUND)
+        );
 
         List<OrderDetailResponse> orderDetailResponses = orders.getOrderDetails().stream().map(details -> OrderDetailResponse.builder()
                 .id(details.getId())
