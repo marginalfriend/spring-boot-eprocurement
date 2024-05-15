@@ -12,6 +12,6 @@ public interface VendorsService {
     Vendor update(Vendor vendor);
     Vendor getById(String id);
     Vendors entityById(String id);
-    List<Vendor> getAll();
+    List<Vendor> getAll(String name);
 
 }

@@ -20,6 +20,6 @@ public class Vendors {
     @Column(name = "id")
     private String id;
 
-    @Column(name = "vendor_name",nullable = false)
+    @Column(name = "vendor_name",nullable = false, unique = true)
     private String nameVendor;
 }

@@ -8,7 +8,7 @@ import com.gacortech.eprocurement.entity.ProductSupplies;
 import java.util.List;
 
 public interface ProductSuppliesService {
-    List<ProductSupplyResponse> getAll();
+    List<ProductSupplyResponse> getAll(ProductSupply productSupply);
     ProductSupplies getByid(Integer i);
     ProductSupplyResponse create(ProductSupply productSupply);
     ProductSupplyResponse update(ProductSupply productSupply);
